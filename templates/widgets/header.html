@@ -1,0 +1,45 @@
+{% block navbar %}
+
+<nav class="navbar navbar-expand-lg bg-body shadow p-3 mb-5">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        {{ ui_text.site_title }}
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
+          <div class="flex-row flex-grow-0">
+              <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">
+                    Search
+                </button>
+              </form>
+          </div>
+          <div class="flex-row">
+              {% if data.account %}
+                  <div class="flex-row">
+                    <img class="rounded-circle float-start" alt="{{ data.account.login }}'s avatar" src="{{ data.account.avatar }}" width=32 height=32>
+                    <h6> {{ data.account.login }} </h6>
+                    <a class="btn btn-outline-primary" href="#" role="button">
+                        {{ ui_text.logout }}
+                    </a>
+                  </div>
+              {% else %}
+                  <div>
+                      <a class="btn btn-primary" href="#" role="button">
+                          {{ ui_text.login }}
+                      </a>
+                      <a class="btn btn-outline-primary" href="#" role="button">
+                          {{ ui_text.register }}
+                      </a>
+                  </div>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+</nav>
+
+
+{% endblock %}

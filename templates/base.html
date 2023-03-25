@@ -1,0 +1,21 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> {% block title %} {% endblock %} </title>
+    <script src="{% static "js/bootstrap.js" %}"></script>
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <link rel="icon" href="https://i.stack.imgur.com/7XElg.jpg?s=64&g=1" sizes="32x32" type="image/png">
+  </head>
+  <body>
+    <header class="site-header sticky-top">
+        {% include 'widgets/header.html' %}
+    </header>
+    <main class="d-flex container flex-row flex-shrink-0  bg-light p-9">
+        {% block content %} {% endblock %}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+
+{% block content %}
+
+<div class="accordion-item">
+    <h2 class="accordion-header " id="heading{{ question.id }}">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ question.id }}" aria-expanded="true" aria-controls="collapse{{ question.id }}">
+        <strong>{{ question.title }}</strong>
+      </button>
+    </h2>
+    <div id="collapse{{ question.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ question.id }}" data-bs-parent="#{{ parent }}">
+      <div class="accordion-body">
+        <img class="rounded-circle float-start" src="{{ question.account.avatar }}" alt="{{ question.account.login }}'s avatar" width=32 height=32>
+          {{ question.description }}
+      </div>
+    </div>
+</div>
+
+{% endblock %}

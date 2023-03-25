@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Список вопросов{% endblock %}
+
+{% block content %}
+
+<div class="col-md-9">
+    {% include 'widgets/question_list.html' %}
+</div>
+
+<div class="col-md-3">
+    {% include 'widgets/sidebar.html' %}
+</div>
+
+{% endblock %}
+

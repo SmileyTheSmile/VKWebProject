@@ -1,0 +1,19 @@
+{% block popular_tags %}
+
+<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+  <span class="fs-4 text-center">
+      {{ ui_text.popular_tags }}
+  </span>
+</a>
+<hr>
+<div class="p-3">
+    {% for tag in data.popular_tags %}
+        <a class="btn btn-outline-primary" href="#" role="button">
+            {{ tag.text }}
+        </a>
+    {% empty %}
+        <a>{{ ui_text.no_tags_found }}</a>
+    {% endfor %}
+</div>
+
+{% endblock %}
