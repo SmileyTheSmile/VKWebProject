@@ -1,7 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %}Логин{% endblock %}
+{% block title %} {{ ui_text.log_in }} {% endblock %}
 
 {% block content %}
+
+<h1>
+    {{ ui_text.log_in }}
+</h1>
+
+<form>
+    <div class="mb-3">
+      <label for="loginField" class="form-label">
+        {{ ui_text.login }}
+      </label>
+      <input type="email" class="form-control" placeholder="{{ ui_text.login_hint }}" id="loginField" aria-describedby="emailHelp">
+    </div>
+
+    <div class="mb-3">
+      <label for="passwordField" class="form-label">
+        {{ ui_text.password }}
+      </label>
+      <input type="password" class="form-control"  placeholder="{{ ui_text.password_hint }}" id="passwordField">
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="stayLoggedIn">
+      <label class="form-check-label" for="stayLoggedIn">
+        {{ ui_text.stay_logged_in }}
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      {{ ui_text.log_in }}
+    </button>
+    <button type="submit" class="btn btn-outline-primary">
+      {{ ui_text.register }}
+    </button>
+</form>
 
 {% endblock %}

@@ -1,14 +1,16 @@
 {% block popular_tags %}
 
-<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-  <span class="fs-4 text-center">
+<a href="/" class="text-lg-center link-dark text-decoration-none">
+  <span class="fs-4">
       {{ ui_text.popular_tags }}
   </span>
 </a>
+
 <hr>
-<div class="p-3">
+
+<div class="d-flex flex-wrap justify-content-evenly flex-fill">
     {% for tag in data.popular_tags %}
-        <a class="btn btn-outline-primary" href="#" role="button">
+        <a class="btn btn-outline-primary mb-2 me-2" href="#" role="button">
             {{ tag.text }}
         </a>
     {% empty %}
