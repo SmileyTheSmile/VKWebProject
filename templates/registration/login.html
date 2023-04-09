@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ log_in }} {% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+
+<h1>
+    {{ log_in }}
+</h1>
+
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="mb-3">
+      {% if field.label_tag %}
+        <label for="loginField" class="form-label">
+          {{ field.label_tag }}
+        </label>
+      {% endif %}
+
+      {{ field }}
+
+      {% if field.help_text %}
+        <label class="helptext"> {{ field.help_text }} </label>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <button type="submit" class="btn btn-primary">
+    {{ log_in }}
+  </button>
+  <button type="submit" class="btn btn-outline-primary" value="Login">
+    {{ register }}
+  </button>
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+
+{% endblock %}

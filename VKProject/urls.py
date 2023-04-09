@@ -1,28 +1,40 @@
-"""VKProject URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
-from HASKer import views
+
+from HAsker import views
+from django.contrib.auth.views import (
+    LogoutView,
+    PasswordResetView
+)
+from HAsker.ui_text import UI_TEXT
 
 
 urlpatterns = [
-    path('', views.get_questions),
-    path('admin/', admin.site.urls),
-    path('question/<int:id>/', views.get_question, name='question_url'),
-    path('login/', views.get_login),
-    path('signup/', views.sign_up),
-    path('ask/', views.ask_question),
+    path('',
+         views.index,
+         name='index'),
+    path('admin/',
+         admin.site.urls,
+         name='admin'),
+    path('question/<int:id>/',
+         views.question,
+         name='question_url'),
+    path('login/',
+         views.SignInView.as_view(next_page='index'),
+         name='login'),
+    path('profile/<int:pk>/',
+         views.SignInView.as_view(),
+         name='profile'),
+    path('password_reset/',
+         PasswordResetView.as_view(),
+         name='password_reset'),
+    path('logout/',
+         LogoutView.as_view(next_page='login'),
+         name='logout'),
+    path('signup/',
+         views.SignUpView.as_view(),
+         name='signup'),
+    path('ask/',
+         views.ask_question,
+         name='ask'),
 ]

@@ -2,18 +2,18 @@
 
     <a href="/" class="text-lg-center link-dark text-decoration-none">
     <span class="fs-4">
-        {{ ui_text.popular_users }}
+        {{ popular_users }}
     </span>
     </a>
     <hr>
     <div class="d-flex flex-column">
-        {% for user in data.popular_users %}
+        {% for pop_user in data.popular_users %}
             <a class="link-primary mb-1 mx-5 h4" href="#" role="button">
-                {{ user.login }}
+                {{ pop_user.login }}
             </a>
         {% empty %}
             <a>
-                {{ ui_text.no_users_found }}
+                {{ no_users_found }}
             </a>
         {% endfor %}
 </div>

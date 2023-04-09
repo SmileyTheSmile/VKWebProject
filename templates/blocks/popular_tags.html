@@ -2,7 +2,7 @@
 
 <a href="/" class="text-lg-center link-dark text-decoration-none">
   <span class="fs-4">
-      {{ ui_text.popular_tags }}
+      {{ popular_tags }}
   </span>
 </a>
 
@@ -14,7 +14,7 @@
             {{ tag.text }}
         </a>
     {% empty %}
-        <a>{{ ui_text.no_tags_found }}</a>
+        <a>{{ no_tags_found }}</a>
     {% endfor %}
 </div>
 

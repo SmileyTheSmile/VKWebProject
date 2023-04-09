@@ -22,5 +22,11 @@ UI_TEXT = {
             'register_email': "Введите ваш e-mail",
             'register_login': "Введите ваш логин",
             'account_settings': "Настройки",
+            'register_password': "Введите пароль",
+            'register_repeat_password': "Повторите пароль",
+            'register_profile_image': "Фото профиля",
+            'register_nickname': "Введите никнейм",
+            'upload_image': "Загрузить изображение",
+            'login_failed': "Неверный логин или пароль.",
         }
 }
