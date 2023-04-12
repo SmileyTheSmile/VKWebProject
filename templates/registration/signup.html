@@ -1,61 +1,32 @@
 {% extends 'base.html' %}
-
-{% block title %} {{ registerration }} {% endblock %}
+{% load i18n %}
+{% block title %} {% trans 'Registration' %} {% endblock %}
 
 {% block content %}
+  <h1>
+    {% trans 'Registration' %}
+  </h1>
 
-<h1>
-  {{ registration }}
-</h1>
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        {% if field.label_tag %}
+          <label class="form-label">
+            {{ field.label_tag }}
+          </label>
+        {% endif %}
 
-<form>
-  <div class="mb-3">
-    <label for="loginField" class="form-label">
-      {{ register_login }}
-    </label>
-    <input type="email" class="form-control" id="loginField" aria-describedby="emailHelp">
-  </div>
+        {{ field }}
 
-  <div class="mb-3">
-    <label for="emailField" class="form-label">
-      {{ register_email }}
-    </label>
-    <input type="email" class="form-control" id="emailField" aria-describedby="emailHelp">
-  </div>
+        {% if field.help_text %}
+          <label class="helptext"> {{ field.help_text }} </label>
+        {% endif %}
+      </div>
+    {% endfor %}
 
-  <div class="mb-3">
-    <label for="nicknameField" class="form-label">
-      {{ register_nickname }}
-    </label>
-    <input type="text" class="form-control" id="nicknameField" aria-describedby="emailHelp">
-  </div>
-
-  <div class="mb-3">
-    <label for="passwordField" class="form-label">
-      {{ register_password }}
-    </label>
-    <input type="password" class="form-control" id="passwordField">
-  </div>
-
-  <div class="mb-3">
-    <label for="repeatPasswordField" class="form-label">
-      {{ register_repeat_password }}
-    </label>
-    <input type="password" class="form-control" id="repeatPasswordField">
-  </div>
-
-  <div class="mb-3 flex-d flex-wrap">
-    <label for="imageField" class="form-label">
-      {{ register_profile_image }}
-    </label>
-    <button type="image" class="btn btn-primary" id="imageField">
-      {{ upload_image }}
+    <button type="submit" class="btn btn-primary">
+      {% trans 'Register' %}
     </button>
-  </div>
-
-  <button type="submit" class="btn btn-primary">
-    {{ log_in }}
-  </button>
-</form>
-
+  </form>
 {% endblock %}

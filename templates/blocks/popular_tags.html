@@ -1,20 +1,24 @@
+{% load i18n %}
+
 {% block popular_tags %}
 
 <a href="/" class="text-lg-center link-dark text-decoration-none">
-  <span class="fs-4">
-      {{ popular_tags }}
-  </span>
+    <span class="fs-4">
+        {% trans "PopularTags" %}
+    </span>
 </a>
 
 <hr>
 
 <div class="d-flex flex-wrap justify-content-evenly flex-fill">
-    {% for tag in data.popular_tags %}
+    {% for tag in popular_tags %}
         <a class="btn btn-outline-primary mb-2 me-2" href="#" role="button">
             {{ tag.text }}
         </a>
     {% empty %}
-        <a>{{ no_tags_found }}</a>
+        <a>
+            {{ no_tags_found }}
+        </a>
     {% endfor %}
 </div>
 

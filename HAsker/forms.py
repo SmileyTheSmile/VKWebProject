@@ -1,83 +1,158 @@
-from django.contrib.auth.forms import AuthenticationForm, BaseUserCreationForm, UsernameField
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UsernameField
 from HAsker.ui_text import UI_TEXT
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
+from HAsker.models import Profile, Question
 
 import django.forms as forms
 
 
-class SignInForm(AuthenticationForm):
-    def __init__(self, request=None, *args, **kwargs):
-        super().__init__(request=None, *args, **kwargs)
-        self.fields['username'].label = UI_TEXT['ru']["register_login"]
-        self.fields['password'].label = UI_TEXT['ru']["register_password"]
-        
-        self.fields['password'].help_text = "xcxc"
-        self.fields['password'].help_text = "xcxc"
-        
-        for key, item in self.fields.items():
-            print(f"{key}, {item}")
-        
-        self.fields['username'].widget.attrs = {
-                'class': 'form-control',
-                'placeholder': UI_TEXT['ru']["login_hint"]
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        max_length=256,
+        required=True,
+        label=_('EnterLogin'),
+        help_text=_('UsernameHelp'),
+        widget=forms.EmailInput(
+            attrs= {
+                'class': "form-control",
+                'placeholder': _('LoginPlaceholder')
             }
-        self.fields['password'].widget.attrs = {
-                'class': 'form-control'
+        ),
+    )
+    password = forms.CharField(
+        max_length=256,
+        required=True,
+        label=_('EnterPassword'),
+        help_text=_('PasswordHelp'),
+        widget=forms.PasswordInput(
+            attrs= {
+                'class': "form-control",
+                'placeholder': _('PasswordPlaceholder')
             }
-        
-        self.fields['stay_logged_in'] = forms.BooleanField(required=False,
-                                                           help_text=UI_TEXT['ru']["stay_logged_in"],
-                                                           )
-        self.fields['stay_logged_in'].widget.attrs = {
-            'class': "form-check-input"
-        }
+        ),
+    )
+    stay_logged_in = forms.BooleanField(
+        label=_('RememberPassword'),
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs= {
+                'class': "form-check-input"
+            },
+        ),
+    )
 
-class SignUpForm(BaseUserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
-    email = forms.EmailField(max_length=254, help_text='Enter a valid email address')
-    username = UsernameField(max_length=254, help_text='Enter a valid email address')
-
+class SignUpForm(UserCreationForm):
+    username = UsernameField(
+        required=True,
+        max_length=256,
+        label=_('RegisterUsername'),
+        widget=forms.TextInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    email = forms.CharField(
+        required=True,
+        max_length=320,
+        label=_('RegisterEmail'),
+        widget=forms.EmailInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    nickname = forms.CharField(
+        required=True,
+        max_length=256,
+        label=_('RegisterNickname'),
+        widget=forms.TextInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    password1 = forms.CharField(
+        required=True,
+        max_length=256,
+        label=_('RegisterPassword1'),
+        widget=forms.PasswordInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    password2 = forms.CharField(
+        required=True,
+        max_length=256,
+        label=_('RegisterPassword2'),
+        widget=forms.PasswordInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    avatar = forms.ImageField(
+        required=False,
+        label=_('UploadAvatar'),
+        widget=forms.FileInput(
+            attrs= {
+                'class': "btn btn-outline"
+            }
+        ),
+    )
+    
     class Meta:
         model = User
-        fields = {
+        fields = [
             'username', 
-            'first_name', 
-            'last_name', 
-            'email', 
+            'email',
+            'nickname',
             'password1', 
             'password2', 
-        }
+            'avatar', 
+        ]
 
 class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = {
-            'username',
-            'first_name', 
-            'last_name', 
-            'email',
-        }
-        
-        widgets = {
-            'username': forms.TextInput(
-            attrs=
-            {
-                'class': 'form-control'
-            }),
-            'first_name':forms.TextInput(
-            attrs=
-            {
-                'class': 'form-control'
-            }),
-            'last_name':forms.TextInput(
-            attrs=
-            {
-                'class': 'form-control'
-            }), 
-            'email':forms.TextInput(
-            attrs=
-            {
-                'class': 'form-control'
-            }),
-        }
+    pass
+
+class AskForm(forms.ModelForm):
+    title = forms.CharField(
+        required=True,
+        max_length=256,
+        label=_('QuestionTitle'),
+        widget=forms.TextInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    content = forms.CharField(
+        required=True,
+        max_length=30000,
+        label=_('QuestionContent'),
+        widget=forms.Textarea(
+            attrs= {
+                'class': "form-control",
+                "rows":"10",
+            }
+        ),
+    )
+    tags = forms.CharField(
+        max_length=3000,
+        label=_('QuestionTags'),
+        widget=forms.TextInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+
+    class Meta: 
+        model = Question
+        fields = (
+            'title',
+            'content',
+            'tags',
+        )

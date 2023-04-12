@@ -1,56 +1,55 @@
+{% load i18n %}
+
 {% block navbar %}
+    <nav class="navbar navbar-expand-lg bg-body shadow p-3 mb-5">
+        <div class="container flex-row">
+            <a class="h3 text-decoration-none" href="{% url 'index' %}">
+                {% trans 'SiteTitle' %}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<nav class="navbar navbar-expand-lg bg-body shadow p-3 mb-5">
-    <div class="container flex-row">
-        <a class="navbar-brand" href="#">
-            {{ site_title }}
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="flex-fill mx-4">
-                <form class="d-flex " role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        Search
-                    </button>
-                </form>
-            </div>
-            <div class="align-self-end">
-                {% if request.user.is_authenticated %}
-                    <div class="d-flex flex-wrap">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="flex-fill mx-4">
+                    <form class="d-flex " role="search">
+                        <input class="form-control me-2" type="search" placeholder={% trans 'Search' %} aria-label="Search">
+                        <a class="btn btn-outline-success" href="{% url 'ask' %}" role="button">
+                            {% trans 'AskQuestion' %}
+                        </a> 
+                    </form>
+                </div>
+                <div class="align-self-end">
+                    {% if request.user.is_authenticated %}
+                        <div class="d-flex flex-wrap">
+                            <div>
+                                <img class="rounded-circle me-2" alt="{{ data.account.login }}'s avatar" src="{{ data.account.avatar }}" width=32 height=32>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <p class="me-3">
+                                    {{ request.user | title }}
+                                </p>
+                                <a class="btn btn-outline-primary" href="#" role="button">
+                                    {% trans 'ProfileSettings' %}
+                                </a>
+                                <a class="btn btn-outline-primary" href="{% url 'logout' %}" role="button">
+                                    {% trans 'LogOut' %}
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
                         <div>
-                            <img class="rounded-circle me-2" alt="{{ data.account.login }}'s avatar" src="{{ data.account.avatar }}" width=32 height=32>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <p class="me-3">
-                                {{ request.user |title }}
-                            </p>
-                            <a class="btn btn-outline-primary" href="#" role="button">
-                                {{ account_settings }}
+                            <a class="btn btn-primary" href="{% url 'login' %}" role="button">
+                                {% trans 'LogIn' %}
                             </a>
-                            <a class="btn btn-outline-primary" href="{% url 'logout' %}" role="button">
-                                {{ logout }}
+                            <a class="btn btn-outline-primary" href="{% url 'signup' %}" role="button">
+                                {% trans 'Register' %}
                             </a>
                         </div>
-                    </div>
-                {% else %}
-                    <div>
-                        <a class="btn btn-primary" href="{% url 'login' %}" role="button">
-                            {{ log_in }}
-                        </a>
-                        <a class="btn btn-outline-primary" href="{% url 'signup' %}" role="button">
-                            {{ registration }}
-                        </a>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-</nav>
-
-
+    </nav>
 {% endblock %}

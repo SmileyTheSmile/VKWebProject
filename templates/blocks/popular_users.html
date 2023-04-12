@@ -1,21 +1,25 @@
+{% load i18n %}
+
 {% block popular_users %}
 
-    <a href="/" class="text-lg-center link-dark text-decoration-none">
+<a href="/" class="text-lg-center link-dark text-decoration-none">
     <span class="fs-4">
-        {{ popular_users }}
+        {% trans 'PopularUsers' %}
     </span>
-    </a>
-    <hr>
-    <div class="d-flex flex-column">
-        {% for pop_user in data.popular_users %}
-            <a class="link-primary mb-1 mx-5 h4" href="#" role="button">
-                {{ pop_user.login }}
-            </a>
-        {% empty %}
-            <a>
-                {{ no_users_found }}
-            </a>
-        {% endfor %}
+</a>
+
+<hr>
+
+<div class="d-flex flex-column">
+    {% for pop_user in popular_users %}
+        <a class="link-primary mb-1 mx-5 h4" href="#" role="button">
+            {{ pop_user.login }}
+        </a>
+    {% empty %}
+        <a>
+            {{ no_users_found }}
+        </a>
+    {% endfor %}
 </div>
 
 {% endblock %}

@@ -1,23 +1,32 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from datetime import date
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.contrib.auth.models import User
 
 from django.contrib.auth.views import LoginView
-from django.views.generic import View, CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, FormView
+from django.views.generic.base import TemplateView
 
 from HAsker.ui_text import UI_TEXT
-from HAsker.forms import SignInForm, SignUpForm, ProfileForm
-from HAsker.models import QuestionManager, TagManager, UserManager, User
+from HAsker.forms import LoginForm, SignUpForm, ProfileForm, AskForm
+from HAsker.models import QuestionManager, TagManager, UserManager, Profile, Question
+
+
+# django-admin makemessages -l ru
+# python manage.py compilemessages --use-fuzzy
 
 
 class SignInView(LoginView):
     redirect_authenticated_user = True
-    authentication_form = SignInForm
-    extra_context = UI_TEXT['ru']
+    authentication_form = LoginForm
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }
     
     def get_success_url(self):
         return reverse_lazy('index') 
@@ -26,95 +35,54 @@ class SignInView(LoginView):
         messages.error(self.request,UI_TEXT['ru']["login_failed"])
         return self.render_to_response(self.get_context_data(form=form))
     
-class QuestionView(View):
-    pass
+class QuestionsView(TemplateView):
+    template_name = 'index.html'
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }
+    
+class AskView(CreateView, LoginRequiredMixin):
+    template_name = 'ask.html'
+    login_url = "login"
+    model = Question
+    form_class = AskForm
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }
+
+class QuestionView(TemplateView):
+    login_url = "question"
+    success_url = reverse_lazy('index')
+    template_name = 'question.html'
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }
 
 class SignUpView(CreateView):
+    template_name = 'registration/signup.html'
+    model = User
     form_class = SignUpForm
     success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }
     
 class ProfileView(UpdateView):
-    model = User
+    template_name = 'commons/profile.html'
+    model = Profile
     form_class = ProfileForm
     success_url = reverse_lazy('profile')
-    template_name = 'commons/profile.html'
-
-
-def index(request):
-    context = {
-            'data':
-                {
-                    'account':
-                        {
-                            'login': 'kdanil01',
-                            'avatar': 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1',
-                        },
-                    'questions': QuestionManager.recent_questions(20),
-                    'popular_tags': TagManager.popular_tags(9),
-                    'popular_users': UserManager.popular_users(5),
-                },
-            'ui_text': UI_TEXT['ru'],
-        }
-    template = 'index.html'
-    return render(request, template, context)
-
-
-def question(request, question_id):
-    context = {
-            'data':
-                {
-                    'account':
-                        {
-                            "login": "kdanil01",
-                            'avatar': 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1',
-                        },
-                    'popular_tags': TagManager.popular_tags(5),
-                    'popular_users': UserManager.popular_users(5),
-                },
-            'ui_text': UI_TEXT['ru'],
-        }
-    template = 'question.html'
-    return render(request, template, context)
-
-
-def sign_up(request):
-    context = {
-            'data':
-                {
-                    'account':
-                        {
-                            "login": "kdanil01",
-                            'avatar': 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1',
-                        },
-                    'popular_tags': TagManager.popular_tags(5),
-                    'popular_users': UserManager.popular_users(5),
-                    'links': {},
-                },
-            'ui_text': UI_TEXT['ru'],
-        }
-    template = 'signup.html'
-    return render(request, template, context)
-
-
-@login_required(redirect_field_name='login')
-def ask_question(request): 
-    return render(
-        request,
-        'ask.html',
-        {
-            'data':
-                {
-                    'account':
-                        {
-                            "login": "kdanil01",
-                            'avatar': 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1',
-                        },
-                    'popular_tags': TagManager.popular_tags(5),
-                    'popular_users': UserManager.popular_users(5),
-                    'links': {},
-                },
-            'ui_text': UI_TEXT['ru'],
-        }
-    )
-
+    extra_context = {
+        'questions': QuestionManager.recent_questions(20),
+        'popular_tags': TagManager.popular_tags(9),
+        'popular_users': UserManager.popular_users(5),
+    }

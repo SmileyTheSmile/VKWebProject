@@ -8,18 +8,20 @@
     <title> {% block title %} {% endblock %} </title>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="icon" href="https://i.stack.imgur.com/7XElg.jpg?s=64&g=1" sizes="32x32" type="image/png">
+    <link rel="icon" type="image/jpg" href="https://sun9-47.userapi.com/impg/jcxVWiiaEqi8h8Pch4v3bupuFzAxVBTnY8tNjw/FcFSTuVqKR4.jpg?size=400x400&quality=95&sign=76416cafb09e971bcd3e304835c774f4&type=album">
   </head>
   <body>
     <header class="site-header sticky-top">
         {% include 'widgets/header.html' %}
-    </header>
-    <main class="d-flex container flex-row flex-shrink-0 bg-light p-9">
-        <div class="col-md-9">
-          {% block content %} {% endblock %}
-        </div>
-        <div class="col-md-3">
-          {% include 'widgets/sidebar.html' %}
+    </header> 
+    <main class="d-flex container flex-row bg-light rounded">
+        <div class="row">
+          <div class="col-md-9 py-3 px-4">
+            {% block content %} {% endblock %}
+          </div>
+          <div class="col-md-3 pb-5">
+            {% include 'widgets/sidebar.html' %}
+          </div>
         </div>
     </main>
   </body>

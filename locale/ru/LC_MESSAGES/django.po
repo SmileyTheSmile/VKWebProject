@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# django-admin makemessage -l ru
+# python manage.py compilemessages --use-fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-10 15:16+0300\n"
+"PO-Revision-Date: 2023-04-09 19:39+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: HAsker/forms.py:14
+msgid "EnterLogin"
+msgstr "Введите логин"
+
+#: HAsker/forms.py:18
+msgid "LoginHint"
+msgstr "Введите ваш логин или эл. почту"
+
+#: HAsker/forms.py:25
+msgid "EnterPassword"
+msgstr "Введите пароль"
+
+#: HAsker/forms.py:29
+msgid "PasswordHint"
+msgstr "Введите ваш пароль"
+
+#: HAsker/forms.py:34
+msgid "RememberPassword"
+msgstr "Запомнить пароль?"
+
+#: HAsker/forms.py:46
+msgid "RegisterUsername"
+msgstr "Имя пользователя:"
+
+#: HAsker/forms.py:55
+msgid "RegisterEmail"
+msgstr "Электронная почта:"
+
+#: HAsker/forms.py:64
+msgid "RegisterNickname"
+msgstr "Никнэйм:"
+
+#: HAsker/forms.py:73
+msgid "RegisterPassword1"
+msgstr "Пароль:"
+
+#: HAsker/forms.py:82
+msgid "RegisterPassword2"
+msgstr "Повторите пароль:"
+
+#: HAsker/forms.py:90
+msgid "UploadAvatar"
+msgstr "Фото профиля:"
+
+#: templates/blocks/paginator.html:10
+msgid "PreviousPage"
+msgstr "Предыдущая"
+
+#: templates/blocks/paginator.html:20
+msgid "NextPage"
+msgstr "Следующая"
+
+#: templates/blocks/popular_tags.html:7
+msgid "PopularTags"
+msgstr "Популярные тэги"
+
+#: templates/blocks/popular_users.html:7
+msgid "PopularUsers"
+msgstr "Популярные пользователи"
+
+#: templates/index.html:5
+#, fuzzy
+#| msgid "NewQuestions"
+msgid "Questions"
+msgstr "Новые вопросы"
+
+#: templates/index.html:11
+msgid "NewQuestions"
+msgstr "Новые вопросы"
+
+#: templates/index.html:19
+msgid "EmptyQuestionsList"
+msgstr "EmptyQuestionsList"
+
+#: templates/registration/login.html:3 templates/registration/login.html:7
+#: templates/registration/login.html:41 templates/widgets/header.html:45
+msgid "LogIn"
+msgstr "Войти"
+
+#: templates/registration/login.html:10
+msgid "FailedLogin"
+msgstr "Неверный логин или пароль"
+
+#: templates/registration/login.html:44 templates/registration/signup.html:29
+#: templates/widgets/header.html:48
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: templates/registration/signup.html:3 templates/registration/signup.html:7
+msgid "Registration"
+msgstr "Регистрация"
+
+#: templates/widgets/header.html:8
+msgid "SiteTitle"
+msgstr "HAsker"
+
+#: templates/widgets/header.html:18 templates/widgets/header.html:20
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/widgets/header.html:35
+msgid "ProfileSettings"
+msgstr "Настройки профиля"
+
+#: templates/widgets/header.html:38
+msgid "LogOut"
+msgstr "Выйти"
