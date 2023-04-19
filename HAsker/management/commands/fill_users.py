@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 
 from HAsker.models import Profile
-from HAsker.services import random_user_data_list, random_string, random_string_list
+from HAsker.services import random_user_data_list, random_word, random_word_list
 
 # python manage.py fill_users 10
 
@@ -34,7 +34,7 @@ class Command(BaseCommand):
             )
 
             nickname_length = Profile._meta.get_field('nickname').max_length
-            random_nicknames = random_string_list(users_num, nickname_length)
+            random_nicknames = random_word_list(users_num, nickname_length)
 
             Profile.objects.bulk_create([
                 Profile.objects.create(

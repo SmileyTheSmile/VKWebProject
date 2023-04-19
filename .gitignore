@@ -1,8 +1,7 @@
-.venv
-.vscode
+/.venv
+/.vscode
 /tasks
 
 HAsker/__pycache__
-HAsker/migrations
 VKProject/__pycache__
 *.sql

@@ -1,11 +1,11 @@
 from django.core.management.base import BaseCommand
 
 from HAsker.models import Question, Profile, Tag
-from HAsker.services import random_question_data
+from HAsker.services import random_sentence, random_text
 
 import random
 
-# python manage.py fill_questions 10
+# python manage.py fill_questions 100
 
 class Command(BaseCommand):
     help = 'Fills the Question tables with <questions_num> random questions from random users.'
@@ -15,14 +15,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         random_user = random.choice(list(Profile.objects.all()))
-        random_questions = [random_question_data()] * options['questions_num'][0]
         new_questions = Question.objects.bulk_create(
             [
                 Question(
-                    title=title,
-                    content=content,
+                    title=random_sentence(12, 12),
+                    content=random_text(12, 12, 12),
                     author=random_user,
-                ) for title, content in random_questions]
+                ) for _ in options['questions_num'][0]
+            ]
         )
 
         for question in new_questions:

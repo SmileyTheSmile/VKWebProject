@@ -1,7 +1,19 @@
 import random
 import string
 import lorem
-from lorem.text import TextLorem
+
+def random_word(max_length):
+    return ''.join(random.choice(string.ascii_lowercase)
+                    for _ in range(random.randint(1, max_length)))
+
+def random_sentence(max_word_length, max_word_num):
+    return ''.join(random_word(max_word_length)
+                    for _ in range(random.randint(1, max_word_num)))
+
+def random_text(max_word_length, max_word_num, max_sentence_num):
+    return ''.join(random_sentence(max_word_length, max_word_num)
+                    for _ in range(random.randint(1, max_sentence_num)))
+
 
 def random_user_data(field_lengths):
     return (''.join(random.choice(string.ascii_lowercase)
@@ -9,20 +21,11 @@ def random_user_data(field_lengths):
                     for length in field_lengths)
 
 def random_question_data():
-    return lorem.sentence(), lorem.text()
-
-def random_tagword():
-    return random.choice(lorem.sentence().split())
-
-def random_tagwords(num):
-    return TextLorem(srange=(num, num)).sentence().split()
-
-def random_string(length):
-    return ''.join(random.choice(string.ascii_lowercase)
-                    for _ in range(random.randint(1, length)))
+    return (random_sentence(12, 12),
+            random_text(12, 12, 12))
 
 def random_user_data_list(num, max_lengths):
     return [random_user_data(max_lengths) for _ in range(num)]
 
-def random_string_list(num, max_length):
-    return [random_string(max_length) for _ in range(num)]
+def random_word_list(num, max_length):
+    return [random_word(max_length) for _ in range(num)]

@@ -51,7 +51,7 @@ class QuestionManager(models.Manager):
         pass
     
     def recent_questions(num):
-        return DummyInfo.questions_list(num)
+        return Question.objects.all()[:num]
     
     def top_questions():
         pass

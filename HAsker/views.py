@@ -60,7 +60,7 @@ class QuestionView(TemplateView):
     success_url = reverse_lazy('index')
     template_name = 'question.html'
     extra_context = {
-        'questions': QuestionManager.recent_questions(20),
+        'questions': QuestionManager.recent_questions(30),
         'popular_tags': TagManager.popular_tags(9),
         'popular_users': UserManager.popular_users(5),
     }

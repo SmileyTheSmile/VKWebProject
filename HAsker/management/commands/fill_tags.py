@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
 from HAsker.models import Tag
-from HAsker.services import random_string_list
+from HAsker.services import random_word_list
 
 import random
 
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         try:
             Tag.objects.bulk_create(
                 Tag(name=tagname)
-                for tagname in random_string_list(options['tags_num'][0],
+                for tagname in random_word_list(options['tags_num'][0],
                                                 Tag._meta.get_field('name').max_length)
             )
             print(f"{options['tags_num'][0]} tags have been added successfully")

@@ -16,7 +16,7 @@ urlpatterns = [
     path('',
          views.QuestionsView.as_view(),
          name='index'),
-    path('question/<int:id>/',
+    path('question/<int:pk>/',
          views.QuestionView.as_view(),
          name='question'),
     path('login/',
