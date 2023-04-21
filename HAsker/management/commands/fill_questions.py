@@ -14,14 +14,13 @@ class Command(BaseCommand):
         parser.add_argument('questions_num', nargs='+', type=int)
 
     def handle(self, *args, **options):
-        random_user = random.choice(list(Profile.objects.all()))
         new_questions = Question.objects.bulk_create(
             [
                 Question(
                     title=random_sentence(12, 12),
                     content=random_text(12, 12, 12),
-                    author=random_user,
-                ) for _ in options['questions_num'][0]
+                    author=random.choice(list(Profile.objects.all())),
+                ) for _ in range(options['questions_num'][0])
             ]
         )
 

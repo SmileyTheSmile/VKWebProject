@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, UpdateView, FormView
+from django.views.generic import CreateView, UpdateView, FormView, ListView
 from django.views.generic.base import TemplateView
 
 from HAsker.ui_text import UI_TEXT
@@ -35,13 +35,18 @@ class SignInView(LoginView):
         messages.error(self.request,UI_TEXT['ru']["login_failed"])
         return self.render_to_response(self.get_context_data(form=form))
     
-class QuestionsView(TemplateView):
+class QuestionsView(ListView):
     template_name = 'index.html'
+    paginate_by = 10
+    model = Question
     extra_context = {
-        'questions': QuestionManager.recent_questions(20),
         'popular_tags': TagManager.popular_tags(9),
         'popular_users': UserManager.popular_users(5),
     }
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
     
 class AskView(CreateView, LoginRequiredMixin):
     template_name = 'ask.html'

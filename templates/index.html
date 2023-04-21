@@ -8,7 +8,7 @@
     </h1> 
 
     <div class="accordion row-md-7" id="questions_list">
-        {% for question in questions %}
+        {% for question in page_obj %}
             {% include 'blocks/question_item.html' with question=question parent="questions_list" %}
         {% empty %}
             <a> {% trans 'EmptyQuestionsList' %} </a>

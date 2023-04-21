@@ -1,26 +1,64 @@
-
 {% load i18n %}
-
 {% block paginator %}
+    <nav aria-label="Page navigation" class="row-md-1 mt-3 ">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">
+                        {% trans 'FirstPage' %}
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        {% trans 'PreviousPage' %}
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"> <a class="page-link"> {% trans 'FirstPage' %} </a> </li>
+                <li class="page-item disabled"> <a class="page-link"> {% trans 'PreviousPage' %} </a> </li>
+            {% endif %}
 
-<nav aria-label="Page navigation example" class="row-md-1 mt-3">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link">
-                {% trans 'PreviousPage' %}
-            </a>
-        </li>
-        <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">
-                {% trans 'NextPage' %}
-            </a>
-        </li>
-    </ul>
-</nav>
+            {% for page in paginator %}
+                {% if page.number == page_obj.number %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ page.number }}">
+                            {{ page.number }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page.number }}">
+                            {{ page.number }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% empty %}
+                <a> {% trans 'EmptyQuestionsList' %} </a>
+            {% endfor %}
 
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        {% trans 'NextPage' %}
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                        {% trans 'LastPage' %}
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                        {% trans 'NextPage' %}
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                        {% trans 'LastPage' %}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}

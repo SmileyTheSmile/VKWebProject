@@ -51,7 +51,7 @@ class QuestionManager(models.Manager):
         pass
     
     def recent_questions(num):
-        return Question.objects.all()[:num]
+        return Question.objects.all().order_by("date_published")[:num]
     
     def top_questions():
         pass

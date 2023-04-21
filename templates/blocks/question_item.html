@@ -8,15 +8,16 @@
       </button>
     </h2>
     <div id="collapse{{ question.pk }}" class="accordion-collapse collapse" aria-labelledby="heading{{ question.pk }}" data-bs-parent="#{{ parent }}">
+
       <div class="accordion-body flex-row">
-        <div class="flex-column">
+        <div class="col-md-3">
           <img class="rounded-circle float-start" src="{{ question.author.avatar }}" alt="{{ question.author.user.username }}'s avatar">
-          <strong>
+          <strong class="text-break">
             {{ question.author.user.username }}
           </strong>
         </div>
-        <div class="flex-column">
-          <div class="overflow-auto">
+        <div class="col-md-9">
+          <div class="text-start d-flex">
             {{ question.content }}
           </div>
           <a class="btn btn-primary" href="{% url 'question' question.pk %}" role="button">
@@ -24,6 +25,7 @@
           </a>
         </div>
       </div>
+
     </div>
   </div>
 {% endblock %}
