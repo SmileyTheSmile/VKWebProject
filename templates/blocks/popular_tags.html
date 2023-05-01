@@ -12,13 +12,11 @@
 
 <div class="d-flex flex-wrap justify-content-evenly flex-fill">
     {% for tag in popular_tags %}
-        <a class="btn btn-outline-primary mb-2 me-2" href="#" role="button">
-            {{ tag.text }}
+        <a class="btn btn-outline-primary mb-2 me-2 overflow-auto" href="#" role="button">
+            {{ tag.name }}
         </a>
     {% empty %}
-        <a>
-            {{ no_tags_found }}
-        </a>
+        <a> {% trans "NoTagsFound" %} </a>
     {% endfor %}
 </div>
 

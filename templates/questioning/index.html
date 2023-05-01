@@ -3,15 +3,17 @@
 {% block title %} {% trans 'Questions' %} {% endblock %}
 
 {% block content %}
-    <h1 class="mt-3">
+    <h1 class="mt-2">
         {% trans 'NewQuestions' %}
     </h1> 
 
-    <div class="accordion row-md-7" id="questions_list">
+    <div class="accordion" id="questions_list">
         {% for question in page_obj %}
             {% include 'blocks/question_item.html' with question=question parent="questions_list" %}
         {% empty %}
-            <a> {% trans 'EmptyQuestionsList' %} </a>
+            <div class="d-flex flex-wrap justify-content-evenly">
+                <a> {% trans 'EmptyQuestionsList' %} </a>
+            </div>
         {% endfor %}
     </div>
     

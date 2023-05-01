@@ -10,15 +10,13 @@
 
 <hr>
 
-<div class="d-flex flex-column">
-    {% for pop_user in popular_users %}
-        <a class="link-primary mb-1 mx-5 h4" href="#" role="button">
-            {{ pop_user.login }}
+<div class="d-flex flex-wrap justify-content-evenly">
+    {% for profile in popular_users %}
+        <a class="link-primary mb-1 mx-2 h4 overflow-auto" href="{% url 'profile' profile.pk %}" role="button">
+            {{ profile.user.username }}
         </a>
     {% empty %}
-        <a>
-            {{ no_users_found }}
-        </a>
+        <a> {% trans 'NoUsersFound' %} </a>
     {% endfor %}
 </div>
 

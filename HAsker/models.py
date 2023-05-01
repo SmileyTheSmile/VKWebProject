@@ -1,92 +1,52 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.db.models import Count, F
+from django.db.models import Count, F, Sum, Q
 import lorem
 
+# python manage.py makemigrations HAsker
 # python manage.py makemigrations
 # python manage.py migrate
 
-class DummyInfo:
-    @staticmethod
-    def questions_list(num: int):
-        return  [
-        {
-            'id': i,
-            'title': f'Вопрос #{i}: {lorem.sentence()}',
-            'description': lorem.text(),
-            'rating': 5,
-            'account':
-                {
-                    'login': f'{lorem.sentence().split()[0]}{i}',
-                    'avatar': 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1',
-                }
-        }
-        for i in range(num)]
-
-    @staticmethod
-    def popular_tags(num: int):
-        return [
-        {
-            'text': lorem.sentence().split()[0],
-            'id': i
-        }
-        for i in range(num)]
-        
-    @staticmethod
-    def popular_users(num: int):
-        return [ 
-        {
-            'login': lorem.sentence().split()[0],
-            'id': i
-        }
-        for i in range(num)]
-        
 
 class QuestionManager(models.Manager):
-    def question_by_id():
+    def question_by_id(self, id):
+        return self.filter(id=id)
+    
+    def questions_by_tag(self):
         pass
     
-    def questions_by_tag():
+    def recent_questions(self, num):
+        return self.all().order_by("date_published")[:num]
+    
+    def top_questions(self):
         pass
     
-    def recent_questions(num):
-        return Question.objects.all().order_by("date_published")[:num]
-    
-    def top_questions():
-        pass
-    
-    def create_question():
+    def create_question(self):
         pass
 
+
 class TagManager(models.Manager):
-    def popular_tags(num):
-        return DummyInfo.popular_tags(num)
+    def popular_tags(self, num):
+        return self.annotate(
+            question_count=Count('question')
+            ).order_by('-question_count')[:num]
+        #return DummyInfo.popular_tags(num)
     
     def random_tags():
         pass
 
-class UserManager(models.Manager):
-    def authenticate(username: str, password: str):
-        user = authenticate(username=username,
-                            password=password)
-        if user is not None:
-            pass
-        else:
-            pass
-    
-    def popular_users(num):
-        return DummyInfo.popular_users(num)
-    
-    def register_user(**kwargs):
-        user = User.objects.create_user(**kwargs)
-        user.save()
 
-    def popular_users_broken(num):
-        return User.annotate(fieldsum=sum(F('vote__score'))).order_by('vote__score').get(num)
+class ProfileManager(models.Manager):
+    def popular_users(self, num):
+        return self.annotate(
+                rating=Sum('questionvote__score') + Sum('answervote__score')
+            ).order_by('-rating', '-user__date_joined')[:num]
         
-        
+
 class Profile(models.Model):
+    objects = ProfileManager()
+
     user = models.OneToOneField(
         to=User,
         on_delete=models.CASCADE
@@ -111,14 +71,19 @@ class Profile(models.Model):
         db_table = 'profile'
         ordering = ['-user']
     
+
 class Tag(models.Model):
+    objects = TagManager()
     name = models.CharField(
         max_length=255,
         blank=False,
         unique=True
         )
 
+
 class Question(models.Model):
+    objects = QuestionManager()
+
     author = models.ForeignKey(
         to=Profile,
         blank=False,
@@ -139,12 +104,18 @@ class Question(models.Model):
     content = models.TextField(
         max_length=30000,
     )
-    
+
+    @property
+    def likes_count(self):
+        return self.votes.aggregate(Sum('score'))['score__sum']
+
+
 class Answer(models.Model):
-    author = models.OneToOneField(
+    author = models.ForeignKey(
         to=Profile,
         blank=False,
         null=True,
+        unique=False,
         on_delete=models.SET_NULL,
         )
     is_correct = models.BooleanField(
@@ -158,9 +129,16 @@ class Answer(models.Model):
     content = models.TextField(
         blank=False,
         )
+    question = models.ForeignKey(
+        to=Question,
+        blank=False,
+        on_delete=models.CASCADE,
+        related_name="answers",
+        )
+
 
 class Vote(models.Model):
-    author = models.OneToOneField(
+    author = models.ForeignKey(
         to=Profile,
         blank=False,
         null=True,
@@ -173,18 +151,30 @@ class Vote(models.Model):
     creation_date = models.DateTimeField(
         auto_now_add=True,
         blank=False,
+        null=True,
     )
-    
-class AnswerVote(Vote):
-    question = models.ForeignKey(
-        to=Answer,
-        blank=False,
-        on_delete=models.CASCADE,
-        )
+
+    class Meta:
+        abstract = True
+
 
 class QuestionVote(Vote):
     question = models.ForeignKey(
         to=Question,
-        blank=False,
         on_delete=models.CASCADE,
+        related_name="votes",
         )
+    
+    class Meta:
+        unique_together = ['author', 'question']
+ 
+
+class AnswerVote(Vote):
+    answer = models.ForeignKey(
+        to=Answer,
+        on_delete=models.CASCADE,
+        related_name="votes",
+        )
+
+    class Meta:
+        unique_together = ['author', 'answer']

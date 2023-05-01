@@ -1,15 +1,15 @@
 from django.core.management.base import BaseCommand
 
-from HAsker.models import Question
+from HAsker.models import Tag
 
 # python manage.py clean_questions
 
 class Command(BaseCommand):
-    help = 'Deletes all questions'
+    help = 'Deletes all tags'
 
     def handle(self, *args, **options):
         try:
-            Question.objects.all().delete()
-            print("Successflly deleted all questions")
+            Tag.objects.all().delete()
+            print("Successflly deleted all tags")
         except Exception as error:
             print(error)
