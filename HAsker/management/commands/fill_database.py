@@ -9,7 +9,7 @@ from HAsker.management.commands import (
     fill_answer_votes,
 )
 
-# python manage.py fill_database 1000 1000 1000 10
+# python manage.py fill_database 100 100 100 10
 
 class Command(BaseCommand):
     help = 'Fills the database with random data.'

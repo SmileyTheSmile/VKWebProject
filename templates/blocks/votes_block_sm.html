@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% block content %}
+    <div class="btn-group-toggle btn-group-vertical align-items-center justify-content-center" data-toggle="buttons" role="group">
+        <input type="radio" class="btn-check" name="vote_options{{ object.pk }}" id="like{{ object.pk }}" autocomplete="off">
+        <label class="btn btn-sm btn-outline-primary" for="like{{ object.pk }}">
+            <i class="bi bi-caret-up h6"></i>
+        </label>
+        <h5>
+            {{ object.likes_count }}
+        </h5>
+        <input type="radio" class="btn-check" name="vote_options{{ object.pk }}" id="dislike{{ object.pk }}" autocomplete="off">
+        <label class="btn btn-sm btn-outline-primary" for="dislike{{ object.pk }}">
+            <i class="bi bi-caret-down h6"></i>
+        </label>
+    </div>
+{% endblock %}

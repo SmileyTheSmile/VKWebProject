@@ -24,46 +24,58 @@ class Command(BaseCommand):
         while True:
             email = f"{random_word(self.email_length)}@mail.ru"
             if email not in old_emails:
-                old_emails.append(email)
                 return email
 
     def unique_username(self, old_usernames):
         while True:
             username = random_word(self.username_length)
             if username not in old_usernames:
-                old_usernames.append(username)
                 return username
+    
+    def user_generator(self, user_num):
+        if User.objects.count() != 0:
+            emails, usernames = map(list, zip(*User.objects.values_list('email', 'username')))
+        else:
+            emails, usernames = [], []
+
+        for i in range(user_num):
+            username = self.unique_username(usernames)
+            usernames.append(usernames)
+            email = self.unique_email(usernames)
+            emails.append(email)
+
+            yield User(
+                    username=username,
+                    email=email,
+                    password=random_word(self.password_length),
+                )
+    
+    def profile_generator(self, users):
+        for user in users:
+            yield Profile(
+                        user=user,
+                        nickname=random_word(self.nickname_length),
+                    )
 
     def handle(self, *args, **options):
         try:
-            if User.objects.count() != 0:
-                emails, usernames = map(list, zip(*User.objects.values_list('email', 'username')))
-            else:
-                emails, usernames = [], []
-
-            new_users = User.objects.bulk_create([
-                User(
-                    username=self.unique_username(usernames),
-                    email=self.unique_email(emails),
-                    password=random_word(self.password_length),
-                )
-                for i in range(options['users_num'][0])]
+            new_users = User.objects.bulk_create(
+                self.user_generator(options['users_num'][0]),
+                batch_size=1000,
             )
 
             print(f"{len(new_users)} users have been added successfully")
         except IntegrityError as error:
-            print(f"User not created: {error}")
+            print(f"Users not created: {error}")
             return
 
         try:
-            new_profiles = Profile.objects.bulk_create([
-                    Profile(
-                        user=user,
-                        nickname=random_word(self.nickname_length),
-                    )
-                for user in new_users])
+            new_profiles = Profile.objects.bulk_create(
+                self.profile_generator(new_users),
+                batch_size=1000,
+            )
 
             print(f"{len(new_profiles)} user profiles have been added successfully")
         except IntegrityError as error:
-            print(f"Profile not created: {error}")
+            print(f"Profiles not created: {error}")
             return

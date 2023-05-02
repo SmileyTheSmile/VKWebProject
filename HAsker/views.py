@@ -7,32 +7,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, UpdateView, FormView, ListView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import MultipleObjectMixin
 
-from HAsker.ui_text import UI_TEXT
-from HAsker.forms import LoginForm, SignUpForm, ProfileForm, AskForm
+from HAsker.forms import SignUpForm, ProfileForm, AskForm
 from HAsker.models import Profile, Question, Tag, Answer
 
 
 # django-admin makemessages -l ru
 # python manage.py compilemessages --use-fuzzy
-
-
-class SignInView(LoginView):
-    redirect_authenticated_user = True
-    authentication_form = LoginForm
-    extra_context = {
-        'popular_tags': Tag.objects.popular_tags(9),
-        'popular_users': Profile.objects.popular_users(5),
-    }
-    
-    def get_success_url(self):
-        return reverse_lazy('index') 
-    
-    def form_invalid(self, form):
-        messages.error(self.request,UI_TEXT['ru']["login_failed"])
-        return self.render_to_response(self.get_context_data(form=form))
     
     
 class QuestionsView(ListView):
@@ -58,9 +42,9 @@ class AskView(CreateView, LoginRequiredMixin):
     }
 
 
-class QuestionView(ListView):
+class QuestionView(DetailView, MultipleObjectMixin):
     template_name = 'questioning/question.html'
-    model = Answer
+    model = Question
     context_object_name = 'question'
     paginate_by = 5
     extra_context = {
@@ -68,23 +52,9 @@ class QuestionView(ListView):
         'popular_users': Profile.objects.popular_users(5),
     }
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(QuestionView, self).get(request, *args, **kwargs)
-
-    def get_queryset_for_object(self, pk):
-        return Question.objects.question_by_id(pk)
-
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        if pk is None:
-            raise AttributeError('pk expected in url')
-        queryset = self.get_queryset_for_object(pk)
-        return get_object_or_404(queryset, pk=pk)
-
     def get_context_data(self, **kwargs):
-        context = super(QuestionView, self).get_context_data(**kwargs)
-        context[self.context_object_name] = self.object
+        related_answers = Answer.objects.filter(question=self.get_object())
+        context = super(QuestionView, self).get_context_data(object_list=related_answers, **kwargs)
         return context
 
 

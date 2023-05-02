@@ -136,6 +136,10 @@ class Answer(models.Model):
         related_name="answers",
         )
 
+    @property
+    def likes_count(self):
+        return self.votes.aggregate(Sum('score'))['score__sum']
+
 
 class Vote(models.Model):
     author = models.ForeignKey(

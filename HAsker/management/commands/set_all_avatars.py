@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from HAsker.models import Question, Profile, Tag
+from HAsker.models import Profile
 
 link = 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1'
 

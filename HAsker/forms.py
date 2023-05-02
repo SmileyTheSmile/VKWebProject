@@ -1,8 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UsernameField
-from HAsker.ui_text import UI_TEXT
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from HAsker.models import Profile, Question
+from HAsker.models import Question
 
 import django.forms as forms
 

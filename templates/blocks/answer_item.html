@@ -1,0 +1,18 @@
+{% load i18n %}
+
+{% block content %}
+    <div class="d-flex container-fluid border border-secondary rounded pt-3 text-start ">
+        <div class="col-md-1 d-flex flex-column flex-wrap align-items-center justify-content-center">
+            {% include 'blocks/votes_block_sm.html' with object=answer %}
+        </div> 
+        <div class="col-md-11 ">
+            <p class="h6 overflow-auto">
+                {{ answer.author.user.username }}
+            </p>
+
+            <p class="">
+                {{ answer.content }}
+            </p>
+        </div> 
+    </div> 
+{% endblock %}

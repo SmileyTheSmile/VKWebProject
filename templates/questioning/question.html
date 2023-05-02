@@ -5,18 +5,8 @@
 {% block content %}
     <div class="col">
         <div class="row">
-            <div class="col-md-1 d-flex flex-wrap justify-content-evenly">
-                <button class="btn btn-outline-primary" type="submit">
-                    <i class="bi bi-caret-up h6"></i>
-                </button>
-                <div class="">
-                    <h3>
-                        {{ question.likes_count }}
-                    </h3>
-                </div>
-                <button class="btn btn-outline-primary" type="submit">
-                    <i class="bi bi-caret-down h6"></i>
-                </button>
+            <div class="col-md-1 d-flex flex-wrap ">
+                {% include 'blocks/votes_block_lg.html' with object=question %}
             </div>
             <div class="col-md-11">
                 <h1 class="mt-2">
@@ -24,25 +14,37 @@
                 </h1> 
             </div>
         </div>
+        
         <hr>
+
         <div class="text-start">
             {{ question.content }}
+        </div>
+
+        <hr>
+
+        <div class="row">
+            {% for tag in question.tags.all %}
+                <a class="btn btn-primary btn-sm mb-2 me-2 w-25 overflow-auto" href="#" role="button">
+                    {{ tag.name }}
+                </a>
+            {% empty %}
+                <a> {% trans "NoTagsFound" %} </a>
+            {% endfor %}
         </div>
     </div>
 
     <hr>
-    <hr>
 
-    {% for answer in page_obj %}
-        <div class="text-start d-flex container-fluid bg-info">
-            {{ answer.content }}
-        </div> 
-    <hr>
-    {% empty %}
-        <div class="d-flex flex-wrap justify-content-evenly">
-            <a> {% trans 'EmptyAnswersList' %} </a>
-        </div>
-    {% endfor %}
+    <div id="answers_list" class="text-start">
+        {% for answer in page_obj %}
+            {% include 'blocks/answer_item.html' with answer=answer parent="answers_list" %}
+        {% empty %}
+            <div class="d-flex flex-wrap justify-content-evenly">
+                <a> {% trans 'EmptyAnswersList' %} </a>
+            </div>
+        {% endfor %}
+    </div>
     
     {% include 'blocks/paginator.html' %}
 

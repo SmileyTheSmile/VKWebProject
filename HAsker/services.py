@@ -13,3 +13,10 @@ def random_sentence(max_word_length, max_word_num):
 def random_text(max_word_length, max_word_num, max_sentence_num):
     return '. '.join(random_sentence(max_word_length, max_word_num)
                     for _ in range(random.randint(1, max_sentence_num)))
+
+def turn_to_list(thing):
+        if isinstance(thing, list):
+            return thing
+        elif thing is None:
+            return []
+        return [thing]

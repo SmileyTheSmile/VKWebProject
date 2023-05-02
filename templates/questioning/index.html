@@ -7,7 +7,7 @@
         {% trans 'NewQuestions' %}
     </h1> 
 
-    <div class="accordion" id="questions_list">
+    <div class="flex-column" id="questions_list">
         {% for question in page_obj %}
             {% include 'blocks/question_item.html' with question=question parent="questions_list" %}
         {% empty %}
