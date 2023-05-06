@@ -40,7 +40,7 @@ class Command(BaseCommand):
 
         for i in range(user_num):
             username = self.unique_username(usernames)
-            usernames.append(usernames)
+            usernames.append(username)
             email = self.unique_email(usernames)
             emails.append(email)
 

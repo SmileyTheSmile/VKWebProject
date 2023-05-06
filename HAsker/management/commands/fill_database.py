@@ -9,16 +9,14 @@ from HAsker.management.commands import (
     fill_answer_votes,
 )
 
-# python manage.py fill_database 100 100 100 10
+# python manage.py fill_database 10000 0
 
 class Command(BaseCommand):
     help = 'Fills the database with random data.'
 
     def add_arguments(self, parser):
-        parser.add_argument('tags_num', nargs='+', type=int)
-        parser.add_argument('users_num', nargs='+', type=int)
-        parser.add_argument('questions_num', nargs='+', type=int)
-        parser.add_argument('answers_num', nargs='+', type=int)
+        parser.add_argument('ratio', nargs='+', type=int)
+        parser.add_argument('add_likes', nargs='+', type=int)
 
     def handle(self, *args, **options):
         commands = [
@@ -27,9 +25,28 @@ class Command(BaseCommand):
             set_all_avatars.Command(),
             fill_questions.Command(),
             fill_answers.Command(),
-            fill_question_votes.Command(),
-            fill_answer_votes.Command(),
         ]
+
+        if options['add_likes'] == 1:
+            commands += [
+                fill_question_votes.Command(),
+                fill_answer_votes.Command(),
+            ]
+        ratio = options['ratio'][0]
+        options['tags_num'] = [ratio]
+        options['users_num'] = [ratio]
+        options['questions_num'] = [ratio * 10]
+        options['answers_for_each_question'] = [10]   
         
         for command in commands:
             command.handle(*args, **options)
+
+'''
+
+    пользователей — равное ratio;
+    вопросов — ratio * 10;
+    ответы — ratio * 100;
+    тэгов - ratio;
+    оценок пользователей - ratio * 200;
+
+'''

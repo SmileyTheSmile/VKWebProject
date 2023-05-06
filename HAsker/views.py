@@ -1,6 +1,4 @@
 from django.urls import reverse_lazy
-from django.contrib import messages
-from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -11,7 +9,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import MultipleObjectMixin
 
-from HAsker.forms import SignUpForm, ProfileForm, AskForm
+from HAsker.forms import SignUpForm, ProfileForm, AskForm, LoginForm
 from HAsker.models import Profile, Question, Tag, Answer
 
 
@@ -27,7 +25,8 @@ class QuestionsView(ListView):
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
     }
-    
+    # TODO Fix long load times
+
 
 class AskView(CreateView, LoginRequiredMixin):
     template_name = 'questioning/ask.html'
@@ -36,7 +35,6 @@ class AskView(CreateView, LoginRequiredMixin):
     form_class = AskForm
     success_url = reverse_lazy('index')
     extra_context = {
-        'questions': Question.objects.recent_questions(20),
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
     }
@@ -67,7 +65,18 @@ class SignUpView(CreateView):
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
     }
-    
+
+
+class SignInView(LoginView):
+    form_class = LoginForm
+    next_page='index'
+    extra_context = {
+        'popular_tags': Tag.objects.popular_tags(9),
+        'popular_users': Profile.objects.popular_users(5),
+    }
+    # TODO Correctly check if the fields are correct
+    # TODO Fix authorization
+
 
 class ProfileEditView(UpdateView):
     template_name = 'registration/profile_edit.html'
@@ -88,3 +97,21 @@ class ProfileView(DetailView):
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
     }
+
+
+def get_context_data_bad(self, **kwargs):
+    related_answers = Answer.objects.filter(question=self.get_object())
+    context = super(QuestionView, self).get_context_data(object_list=related_answers, **kwargs)
+    context["tags"] = ''.join(
+        [
+            f'''<a class="btn btn-primary btn-sm mb-2 me-2 w-25 overflow-auto" href="#" role="button">
+                { tag.name }
+            </a>''' for tag in context["question"].tags.all()
+        ]
+    )
+    '''
+    <div class="row">
+        {{ tags|safe  }}
+    </div>
+    '''
+    return context

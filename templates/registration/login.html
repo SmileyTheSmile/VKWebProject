@@ -6,9 +6,9 @@
   <h1>
     {% trans 'LogIn' %}
   </h1>
-  {% if form.errors %}
+  {% if form.errors %}  
     <p class="text-danger">
-      {% trans 'FailedLogin' %}
+      {{form.errors}}
     </p>
   {% endif %}
 

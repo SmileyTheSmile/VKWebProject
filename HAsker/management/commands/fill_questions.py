@@ -18,15 +18,15 @@ class Command(BaseCommand):
     def questions_generator(self, questions_num):
         if Profile.objects.count() == 0:
             print("No users found to create questions")
-            return
+            return []
         
-        user_profile_ids = Profile.objects.values_list('id', flat=True)
+        profile_ids = Profile.objects.values_list('id', flat=True)
         
         for _ in range(questions_num):
             yield Question(
                     title=random_sentence(12, 12),
                     content=random_text(12, 12, 12),
-                    author_id=random.choice(user_profile_ids),
+                    author_id=profile_ids[random.randint(0, len(profile_ids) - 1)],
                 ) 
 
     def handle(self, *args, **options):
@@ -45,10 +45,16 @@ class Command(BaseCommand):
                 print("No tags were found to be set in questions")
                 return
 
+            # TODO Try optimising tags...yet again
             with transaction.atomic():
                 tag_ids = Tag.objects.values_list('id', flat=True)
                 for question in new_questions:
-                    question.tags.set([random.choice(tag_ids) for _ in range(random.randint(1, 4))])
+                    question.tags.set(
+                        [
+                            tag_ids[random.randint(0, len(tag_ids) - 1)]
+                            for _ in range(random.randint(1, 4))
+                        ]
+                    )
 
             print("Question tags have been set successfully")
         except IntegrityError as error:

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from HAsker import views, forms
+from HAsker import views
 from django.contrib.auth.views import (
     LoginView,
     LogoutView,
@@ -17,10 +17,8 @@ urlpatterns = [
          admin.site.urls,
          name='admin'),
     path('login/',
-         LoginView.as_view(
-          authentication_form=forms.LoginForm,
-          next_page='index'),
-          name='login'),
+         views.SignInView.as_view(),
+          name='login',),
     path('logout/',
          LogoutView.as_view(next_page='login'),
          name='logout'),

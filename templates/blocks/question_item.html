@@ -1,18 +1,22 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="d-flex flex-wrap border border-secondary rounded pt-3 mt-3 text-start ">
-        <div class="col-md-1 d-flex flex-wrap justify-content-center align-content-start">
+    <div class="d-flex container border border-secondary rounded p-3 mt-3 text-start">
+        <div class="col-md-1 d-flex flex-wrap justify-content-center align-content-start pe-3">
             {% include 'blocks/votes_block_sm.html' with object=question %}
         </div> 
         <div class="col-md-11">
             <p class="h6 overflow-auto">
                 {{ question.author.user.username }}
             </p>
+            <a class="btn h2" href="{% url 'question' question.pk %}" role="button"> 
+                {{ question.title }}
+            </a>
 
-            <p class="">
+            <p class="mx-auto">
                 {{ question.content }}
             </p>
         </div> 
     </div> 
-{% endblock %}
+<!--TODO Add answers counter-->
+{% endblock %} <!--TODO Make a better question card-->

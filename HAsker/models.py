@@ -10,17 +10,18 @@ import lorem
 
 
 class QuestionManager(models.Manager):
+    # TODO Add queries for differently sorted questions
     def question_by_id(self, id):
         return self.filter(id=id)
     
-    def questions_by_tag(self):
-        pass
+    def questions_by_tag(self, tag_id):
+        return self.all().filter(tags__in=tag_id)
     
-    def recent_questions(self, num):
-        return self.all().order_by("date_published")[:num]
+    def recent_questions(self):
+        return self.all().order_by("date_published")
     
     def top_questions(self):
-        pass
+        return self.all().order_by("likes_count")
     
     def create_question(self):
         pass
@@ -43,7 +44,7 @@ class ProfileManager(models.Manager):
                 rating=Sum('questionvote__score') + Sum('answervote__score')
             ).order_by('-rating', '-user__date_joined')[:num]
         
-
+# TODO https://github.com/ziontab/tp-tasks/blob/master/files/markdown/task-5.md
 class Profile(models.Model):
     objects = ProfileManager()
 
@@ -58,7 +59,7 @@ class Profile(models.Model):
         )
     avatar = models.ImageField(
         default='default.jpg',  
-        upload_to='profile_pics',
+        upload_to='profile_pics/%Y/%m/%d/',
     )
     
     def __str__(self):
@@ -79,7 +80,8 @@ class Tag(models.Model):
         blank=False,
         unique=True
         )
-
+    
+#TODO Make a field for the total likes count so that the database doesn't have to count them each time
 
 class Question(models.Model):
     objects = QuestionManager()

@@ -13,10 +13,12 @@ class Command(BaseCommand):
 
     def votes_generator(self):
         if Profile.objects.count() == 0:
-            raise IntegrityError("No users found to create question likes")
+            print("No users found to create question likes")
+            return []
         
         if Question.objects.count() == 0:
-            raise IntegrityError("No questions found to create likes")
+            print("No questions found to create likes")
+            return []
 
         question_ids_and_vote_author_ids = Question.objects.values_list('id', 'votes__author')
         profile_ids = Profile.objects.values_list('id', flat=True)
@@ -33,7 +35,8 @@ class Command(BaseCommand):
         try:
             new_votes = QuestionVote.objects.bulk_create(
                 self.votes_generator(),
-                batch_size=1000)
+                batch_size=1000
+            )
 
             print(f"{len(new_votes)} question votes have been added successfully")
         except IntegrityError as error:

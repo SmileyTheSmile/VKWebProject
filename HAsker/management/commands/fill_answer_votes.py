@@ -13,10 +13,12 @@ class Command(BaseCommand):
 
     def votes_generator(self):
         if Profile.objects.count() == 0:
-            raise IntegrityError("No users found to create answer votes")
+            print("No users found to create answer votes")
+            return []
         
         if Answer.objects.count() == 0:
-            raise IntegrityError("No answers found to create votes")
+            print("No answers found to create votes")
+            return []
 
         answer_ids_and_vote_author_ids = Answer.objects.values_list('id', 'votes__author')
         profile_ids = Profile.objects.values_list('id', flat=True)
