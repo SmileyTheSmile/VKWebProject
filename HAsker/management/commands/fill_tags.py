@@ -2,9 +2,8 @@ from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
 from HAsker.models import Tag
-from HAsker.services import random_word
-
-import random
+ 
+from random_word import RandomWords
 
 # python manage.py fill_tags 10000
 
@@ -16,17 +15,18 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('tags_num', nargs='+', type=int)
 
-    def unique_tag(self, old_tags):
-        while True:
-            tag = random_word(self.tag_length)
-            if tag not in old_tags:
-                return tag
+    def unique_tag(self, old_tags, word_generator):
+        tag = word_generator.get_random_word()
+        while tag in old_tags:
+            tag = word_generator.get_random_word()
+        return tag
     
     def tag_generator(self, tag_num):
         tag_names = list(Tag.objects.values_list('name', flat=True)) if Tag.objects.count() != 0 else []
 
+        word_generator = RandomWords()
         for _ in range(tag_num):
-            tag = self.unique_tag(tag_names)
+            tag = self.unique_tag(tag_names, word_generator)
             tag_names.append(tag)
             yield Tag(name=tag)
 

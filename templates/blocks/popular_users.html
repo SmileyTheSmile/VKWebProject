@@ -12,7 +12,7 @@
 
 <div class="d-flex flex-wrap justify-content-evenly">
     {% for profile in popular_users %}
-        <a class="link-primary mb-1 mx-2 h4 overflow-auto" href="{% url 'profile' profile.pk %}" role="button">
+        <a class="link-primary mb-1 mx-2 h4 text-truncate" href="{% url 'profile' profile.pk %}" role="button">
             {{ profile.user.username }}
         </a>
     {% empty %}

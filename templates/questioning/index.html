@@ -3,9 +3,36 @@
 {% block title %} {% trans 'Questions' %} {% endblock %}
 
 {% block content %}
-    <h1 class="mt-2">
-        {% trans 'NewQuestions' %}
-    </h1> 
+    <div class="d-flex justify-content-between">
+        {% if request.resolver_match.kwargs.tag %}
+            <h1 class="mt-2 align-content-center">
+                {% trans 'TaggedQuestions' %}: "{{ request.resolver_match.kwargs.tag }}"
+            </h1>
+        {% else %}
+            {% if request.resolver_match.kwargs.order == 'top'%}
+                <h1 class="mt-2 align-content-center">
+                    {% trans 'PopularQuestions' %}
+                </h1>
+            {% elif request.resolver_match.kwargs.order == 'new'%}
+                <h1 class="mt-2 align-content-center">
+                    {% trans 'PopularQuestions' %}
+                </h1>
+            {% else %}
+                <h1 class="mt-2 align-content-center">
+                    {% trans 'Questions' %}
+                </h1>
+            {% endif %}
+                <div class="btn-toolbar align-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        {% for url_mask, value in ordering_masks.items %}
+                            <a href="{% url 'questions_ordered' order=url_mask %}" class="btn btn-outline-secondary">
+                                {% trans value.label %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+        {% endif %}
+    </div>
 
     <div class="flex-column" id="questions_list">
         {% for question in page_obj %}

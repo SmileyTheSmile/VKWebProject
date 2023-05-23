@@ -23,14 +23,11 @@
 
         <hr>
 
-        <div class="row">
-            {% for tag in question.tags.all %}
-                <a class="btn btn-primary btn-sm mb-2 me-2 w-25 overflow-auto" href="#" role="button">
-                    {{ tag.name }}
-                </a>
-            {% empty %}
-                <a> {% trans "NoTagsFound" %} </a>
-            {% endfor %}
+        <div class="d-flex">
+            <p class="text-truncate text-muted pe-3">
+                {% trans 'Tags' %}: 
+            </p>    
+            {% include 'blocks/tags_block_sm.html' with tags=question.tags.all %}
         </div>
     </div>
 <!--TODO Add an answer form-->

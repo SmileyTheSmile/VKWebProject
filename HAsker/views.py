@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy
 
+from django.utils.translation import gettext as _
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
@@ -21,13 +23,33 @@ class QuestionsView(ListView):
     template_name = 'questioning/index.html'
     paginate_by = 20
     model = Question
+    ordering = "-rating"
     extra_context = {
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
+        'ordering_masks': {
+            "new": {
+                "sort_field": "date_published",
+                "label": _("NewQuestions"),
+            },
+            "top": {
+                "sort_field": "-rating",
+                "label": _("PopularQuestions")
+            },
+        }
     }
-    # TODO Fix long load times
 
+    def get_queryset(self):
+        tag = self.kwargs.get('tag', None)
+        queryset = Question.objects.questions_by_tag(tag) if tag else super().get_queryset()
+        return queryset
 
+    def get_ordering(self):
+        ordering_type = self.kwargs.get('order', "new")
+        self.ordering = self.extra_context['ordering_masks'][ordering_type]["sort_field"]
+        return self.ordering
+
+    
 class AskView(CreateView, LoginRequiredMixin):
     template_name = 'questioning/ask.html'
     login_url = "login"

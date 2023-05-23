@@ -1,21 +1,46 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="d-flex container border border-secondary rounded p-3 mt-3 text-start">
+    <div class="d-flex container border border-secondary rounded py-3 mt-3 text-start">
         <div class="col-md-1 d-flex flex-wrap justify-content-center align-content-start pe-3">
             {% include 'blocks/votes_block_sm.html' with object=question %}
         </div> 
         <div class="col-md-11">
-            <p class="h6 overflow-auto">
-                {{ question.author.user.username }}
-            </p>
-            <a class="btn h2" href="{% url 'question' question.pk %}" role="button"> 
-                {{ question.title }}
-            </a>
+            <div class="">
+                <a class="text-decoration-none" href="{% url 'question' question.pk %}"> 
+                    {{ question.title }}
+                </a>
+                {% if question.content %}
+                    <p class="mx-auto">
+                        {{ question.content }}
+                    </p>
+                {% endif %}
+            </div> 
 
-            <p class="mx-auto">
-                {{ question.content }}
-            </p>
+            <hr>
+
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row overflow-auto w-50">
+                    <p class="text-truncate text-muted pe-3">
+                        {% trans 'Tags' %}: 
+                    </p>    
+                    <div>
+                        {% include 'blocks/tags_block_sm.html' with tags=question.tags.all %}
+                    </div>
+                </div> 
+                <div class="d-flex flex-column border border-muted rounded p-2 overflow-auto w-50">
+                    <div class="d-flex flex-row">
+                        <img class="rounded-circle me-2" alt="{{ question.author.user.login }}'s avatar" src="{{ question.author.avatar }}" width=32 height=32>                  
+                    <p class="text-truncate">
+                        {{ question.author.user.username }}
+                    </p>
+                    </div>   
+                        <p class="text-truncate text-muted">
+                            {% trans 'Asked' %}: {{ question.date_published }}
+                        </p>    
+                </div> 
+            </div> 
+
         </div> 
     </div> 
 <!--TODO Add answers counter-->

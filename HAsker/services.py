@@ -1,6 +1,5 @@
 import random
 import string
-import lorem
 
 def random_word(max_length):
     return ''.join(random.choice(string.ascii_lowercase)

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
-from HAsker.models import QuestionVote, Profile, Question
+from HAsker.models import QuestionVote, Question, Profile
 from HAsker.services import turn_to_list
 
 import random
@@ -37,6 +37,9 @@ class Command(BaseCommand):
                 self.votes_generator(),
                 batch_size=1000
             )
+            
+            Profile.objects.update_rating()
+            Question.objects.update_rating()
 
             print(f"{len(new_votes)} question votes have been added successfully")
         except IntegrityError as error:

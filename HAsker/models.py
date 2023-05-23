@@ -3,30 +3,67 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.db.models import Count, F, Sum, Q
 import lorem
+import itertools
 
 # python manage.py makemigrations HAsker
 # python manage.py makemigrations
 # python manage.py migrate
 
+class IRateableManager(models.Manager):
+    def update_rating(self):
+        pass
 
-class QuestionManager(models.Manager):
+
+class QuestionManager(IRateableManager):
     # TODO Add queries for differently sorted questions
     def question_by_id(self, id):
         return self.filter(id=id)
     
     def questions_by_tag(self, tag_id):
-        return self.all().filter(tags__in=tag_id)
+        return self.all().filter(tags__id=tag_id)
     
     def recent_questions(self):
-        return self.all().order_by("date_published")
+        return self.all().order_by("-date_published")
     
     def top_questions(self):
-        return self.all().order_by("likes_count")
+        return self.all().order_by("-rating")
     
     def create_question(self):
         pass
+    
+    def update_rating(self):
+        questions = self.all()
+        for question in questions:
+            question_votes = question.votes.values_list('score')
+            question.rating = sum(itertools.chain(*question_votes)) or 0
+            
+        self.bulk_update(questions, ['rating'])    
 
+class AnswerManager(IRateableManager):
+    def update_rating(self):
+        answers = self.all()
+        for answer in answers:
+            answer_votes = answer.votes.values_list('score')
+            answer.rating = sum(itertools.chain(*answer_votes)) or 0
+            
+        self.bulk_update(answers, ['rating'])    
 
+class ProfileManager(IRateableManager):
+    def popular_users(self, num):
+        return self.order_by('-rating', 'user__date_joined')[:num]
+    
+    def update_rating(self):
+        profiles = self.all()
+        for profile in profiles:
+            answer_votes = profile.answervote_set.all()
+            question_votes = profile.questionvote_set.all()
+            total_score = answer_votes.aggregate(Sum('score'))['score__sum'] or 0
+            total_score += question_votes.aggregate(Sum('score'))['score__sum'] or 0
+            
+            profile.rating = total_score
+            
+        self.bulk_update(profiles, ['rating'])
+   
 class TagManager(models.Manager):
     def popular_tags(self, num):
         return self.annotate(
@@ -38,14 +75,18 @@ class TagManager(models.Manager):
         pass
 
 
-class ProfileManager(models.Manager):
-    def popular_users(self, num):
-        return self.annotate(
-                rating=Sum('questionvote__score') + Sum('answervote__score')
-            ).order_by('-rating', '-user__date_joined')[:num]
+class IRateable(models.Model):
+    rating = models.IntegerField(
+            blank=False,
+            default=0,
+        )
+
+    class Meta:
+        abstract = True
         
+
 # TODO https://github.com/ziontab/tp-tasks/blob/master/files/markdown/task-5.md
-class Profile(models.Model):
+class Profile(IRateable):
     objects = ProfileManager()
 
     user = models.OneToOneField(
@@ -61,7 +102,7 @@ class Profile(models.Model):
         default='default.jpg',  
         upload_to='profile_pics/%Y/%m/%d/',
     )
-    
+
     def __str__(self):
         return self.user.username
     
@@ -80,10 +121,9 @@ class Tag(models.Model):
         blank=False,
         unique=True
         )
-    
-#TODO Make a field for the total likes count so that the database doesn't have to count them each time
 
-class Question(models.Model):
+
+class Question(IRateable):
     objects = QuestionManager()
 
     author = models.ForeignKey(
@@ -107,12 +147,14 @@ class Question(models.Model):
         max_length=30000,
     )
 
-    @property
-    def likes_count(self):
-        return self.votes.aggregate(Sum('score'))['score__sum']
+
+    def update_votes_count(self):
+        self.rating = self.votes.aggregate(Sum('score'))['score__sum']
 
 
-class Answer(models.Model):
+class Answer(IRateable):
+    objects = AnswerManager()
+    
     author = models.ForeignKey(
         to=Profile,
         blank=False,
@@ -136,11 +178,11 @@ class Answer(models.Model):
         blank=False,
         on_delete=models.CASCADE,
         related_name="answers",
-        )
-
-    @property
-    def likes_count(self):
-        return self.votes.aggregate(Sum('score'))['score__sum']
+    )
+    
+    
+    def update_votes_count(self):
+        self.rating = self.votes.aggregate(Sum('score'))['score__sum']
 
 
 class Vote(models.Model):
@@ -158,29 +200,29 @@ class Vote(models.Model):
         auto_now_add=True,
         blank=False,
         null=True,
-    )
+        )
 
     class Meta:
         abstract = True
 
 
 class QuestionVote(Vote):
-    question = models.ForeignKey(
+    object = models.ForeignKey(
         to=Question,
         on_delete=models.CASCADE,
         related_name="votes",
         )
     
     class Meta:
-        unique_together = ['author', 'question']
+        unique_together = ['author', 'object']
  
 
 class AnswerVote(Vote):
-    answer = models.ForeignKey(
+    object = models.ForeignKey(
         to=Answer,
         on_delete=models.CASCADE,
         related_name="votes",
         )
 
     class Meta:
-        unique_together = ['author', 'answer']
+        unique_together = ['author', 'object']

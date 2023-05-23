@@ -6,6 +6,7 @@ from HAsker.models import Profile, Question, Answer
 from HAsker.services import random_text
 
 import random
+import lorem
 
 # python manage.py fill_answers 10
 
@@ -32,7 +33,7 @@ class Command(BaseCommand):
                     yield Answer(
                                 author_id=user_ids[random.randint(0, len(user_ids) - 1)],
                                 question_id=question_id,
-                                content=random_text(12, 12, 12)
+                                content=lorem.paragraph()
                                 )
 
 

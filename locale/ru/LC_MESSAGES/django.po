@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 15:16+0300\n"
+"POT-Creation-Date: 2023-05-23 10:25+0300\n"
 "PO-Revision-Date: 2023-04-09 19:39+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,110 +22,173 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: HAsker/forms.py:14
+#: HAsker/forms.py:13
 msgid "EnterLogin"
 msgstr "Введите логин"
 
+#: HAsker/forms.py:14
+msgid "UsernameHelp"
+msgstr ""
+
 #: HAsker/forms.py:18
-msgid "LoginHint"
-msgstr "Введите ваш логин или эл. почту"
+msgid "LoginPlaceholder"
+msgstr "Введите имя пользователя"
 
 #: HAsker/forms.py:25
 msgid "EnterPassword"
 msgstr "Введите пароль"
 
-#: HAsker/forms.py:29
-msgid "PasswordHint"
+#: HAsker/forms.py:26
+#, fuzzy
+#| msgid "PasswordHint"
+msgid "PasswordHelp"
 msgstr "Введите ваш пароль"
 
-#: HAsker/forms.py:34
+#: HAsker/forms.py:30
+msgid "PasswordPlaceholder"
+msgstr "Введите пароль"
+
+#: HAsker/forms.py:35
 msgid "RememberPassword"
 msgstr "Запомнить пароль?"
 
-#: HAsker/forms.py:46
+#: HAsker/forms.py:48
 msgid "RegisterUsername"
-msgstr "Имя пользователя:"
+msgstr "Имя пользователя"
 
-#: HAsker/forms.py:55
+#: HAsker/forms.py:58
 msgid "RegisterEmail"
-msgstr "Электронная почта:"
+msgstr "Электронная почта"
 
-#: HAsker/forms.py:64
+#: HAsker/forms.py:68
 msgid "RegisterNickname"
-msgstr "Никнэйм:"
+msgstr "Никнэйм"
 
-#: HAsker/forms.py:73
+#: HAsker/forms.py:78
 msgid "RegisterPassword1"
-msgstr "Пароль:"
+msgstr "Пароль"
 
-#: HAsker/forms.py:82
+#: HAsker/forms.py:88
 msgid "RegisterPassword2"
-msgstr "Повторите пароль:"
+msgstr "Повторите пароль"
 
-#: HAsker/forms.py:90
+#: HAsker/forms.py:97
 msgid "UploadAvatar"
-msgstr "Фото профиля:"
+msgstr "Фото профиля"
 
-#: templates/blocks/paginator.html:10
-msgid "PreviousPage"
-msgstr "Предыдущая"
+#: HAsker/forms.py:123
+#, fuzzy
+#| msgid "QuestionTitle"
+msgid "QuestionTitle"
+msgstr "Название вопроса"
 
-#: templates/blocks/paginator.html:20
-msgid "NextPage"
-msgstr "Следующая"
+#: HAsker/forms.py:133
+#, fuzzy
+#| msgid "QuestionContent"
+msgid "QuestionContent"
+msgstr "Описание вопроса"
+
+#: HAsker/forms.py:143
+#, fuzzy
+#| msgid "QuestionTags"
+msgid "QuestionTags"
+msgstr "Тэги"
+
+#: templates/blocks/header.html:7
+msgid "SiteTitle"
+msgstr "HAsker"
+
+#: templates/blocks/header.html:17
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/blocks/header.html:19 templates/questioning/ask.html:3
+#: templates/questioning/ask.html:7
+#, fuzzy
+#| msgid "AskQuestion"
+msgid "AskQuestion"
+msgstr "Задать вопрос!"
+
+#: templates/blocks/header.html:34
+msgid "ProfileSettings"
+msgstr "Настройки профиля"
+
+#: templates/blocks/header.html:37
+msgid "LogOut"
+msgstr "Выйти"
+
+#: templates/blocks/header.html:44 templates/registration/login.html:3
+#: templates/registration/login.html:7 templates/registration/login.html:45
+msgid "LogIn"
+msgstr "Войти"
+
+#: templates/blocks/header.html:47 templates/registration/login.html:48
+#: templates/registration/signup.html:29
+msgid "Register"
+msgstr "Зарегистрироваться"
 
 #: templates/blocks/popular_tags.html:7
 msgid "PopularTags"
 msgstr "Популярные тэги"
 
+#: templates/blocks/popular_tags.html:19 templates/questioning/question.html:32
+msgid "NoTagsFound"
+msgstr "Тэги не найдены"
+
 #: templates/blocks/popular_users.html:7
 msgid "PopularUsers"
 msgstr "Популярные пользователи"
 
-#: templates/index.html:5
+#: templates/blocks/popular_users.html:19
+msgid "NoUsersFound"
+msgstr "Пользователи не найдены"
+
+#: templates/blocks/question_item_old.html:20
+msgid "Answer"
+msgstr "Ответить"
+
+#: templates/questioning/ask.html:29
+msgid "Ask"
+msgstr "Спросить"
+
+#: templates/questioning/index.html:3
 #, fuzzy
 #| msgid "NewQuestions"
 msgid "Questions"
 msgstr "Новые вопросы"
 
-#: templates/index.html:11
+#: templates/questioning/index.html:8 templates/questioning/index.html:16
 msgid "NewQuestions"
 msgstr "Новые вопросы"
 
-#: templates/index.html:19
+#: templates/questioning/index.html:19
+#, fuzzy
+#| msgid "NewQuestions"
+msgid "PopularQuestions"
+msgstr "Популярные вопросы"
+
+#: templates/questioning/index.html:30
 msgid "EmptyQuestionsList"
-msgstr "EmptyQuestionsList"
+msgstr "Список вопросов пуст"
 
-#: templates/registration/login.html:3 templates/registration/login.html:7
-#: templates/registration/login.html:41 templates/widgets/header.html:45
-msgid "LogIn"
-msgstr "Войти"
-
-#: templates/registration/login.html:10
-msgid "FailedLogin"
-msgstr "Неверный логин или пароль"
-
-#: templates/registration/login.html:44 templates/registration/signup.html:29
-#: templates/widgets/header.html:48
-msgid "Register"
-msgstr "Зарегистрироваться"
+#: templates/questioning/question.html:46
+#, fuzzy
+#| msgid "EmptyQuestionsList"
+msgid "EmptyAnswersList"
+msgstr "Список ответов пуст"
 
 #: templates/registration/signup.html:3 templates/registration/signup.html:7
 msgid "Registration"
 msgstr "Регистрация"
 
-#: templates/widgets/header.html:8
-msgid "SiteTitle"
-msgstr "HAsker"
+#~ msgid "LoginHint"
+#~ msgstr "Введите ваш логин или эл. почту"
 
-#: templates/widgets/header.html:18 templates/widgets/header.html:20
-msgid "Search"
-msgstr "Поиск"
+#~ msgid "PreviousPage"
+#~ msgstr "Предыдущая"
 
-#: templates/widgets/header.html:35
-msgid "ProfileSettings"
-msgstr "Настройки профиля"
+#~ msgid "NextPage"
+#~ msgstr "Следующая"
 
-#: templates/widgets/header.html:38
-msgid "LogOut"
-msgstr "Выйти"
+#~ msgid "FailedLogin"
+#~ msgstr "Неверный логин или пароль"
