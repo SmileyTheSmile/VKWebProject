@@ -80,7 +80,6 @@ class IRateable(models.Model):
         abstract = True
         
 
-# TODO https://github.com/ziontab/tp-tasks/blob/master/files/markdown/task-5.md
 class Profile(IRateable):
     objects = ProfileManager()
 
@@ -95,7 +94,7 @@ class Profile(IRateable):
         )
     avatar = models.ImageField(
         blank=True,
-        default='default_avatars.jpeg',  
+        default='default_avatar.jpeg',  
         upload_to='avatars/%Y/%m/%d/',
     )
 

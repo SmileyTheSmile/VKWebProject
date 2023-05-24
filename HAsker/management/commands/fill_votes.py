@@ -44,13 +44,13 @@ class Command(BaseCommand):
                     batch_size=1000)
 
                 print(f"{len(new_votes)} {vote_type.__name__}s have been added successfully")
+
+                object_type.objects.update_rating()
+                print(f"Static {object_type.__name__} ratings have been updated successfully")
         except IntegrityError as error:
             print(error)
                 
         try:
-            object_type.objects.update_rating()
-            print(f"Static {object_type.__name__} ratings have been updated successfully")
-                    
             Profile.objects.update_rating()
             print("Static profile ratings have been updated successfully")
         except IntegrityError as error:

@@ -4,9 +4,9 @@
     <div class="d-flex container border border-secondary rounded py-3 mt-3 text-start">
         <div class="col-md-1 d-flex flex-wrap justify-content-center align-content-start pe-3">
             {% include 'blocks/votes_block_sm.html' with object=question %}
-            <a class="text-decoration-none"> 
+            <p class="text-decoration-none text-sm-center"> 
                 {% trans 'Answers' %}: {{ question.answers_num }}
-            </a>
+            </p>
         </div> 
         <div class="col-md-11">
             <div class="overflow-auto">

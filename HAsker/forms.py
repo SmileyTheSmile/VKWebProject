@@ -129,7 +129,6 @@ class SignUpForm(UserCreationForm):
             'avatar', 
         ]   
     
-
 class ProfileSettingsForm(forms.ModelForm):
     nickname = forms.CharField(
         required=False,
@@ -167,8 +166,6 @@ class ProfileSettingsForm(forms.ModelForm):
             'avatar', 
         ]   
 
-
-
 class AskForm(forms.ModelForm):
     title = forms.CharField(
         required=True,
@@ -192,6 +189,7 @@ class AskForm(forms.ModelForm):
         ),
     )
     tags = forms.CharField(
+        required=False,
         max_length=3000,
         label=_('QuestionTags'),
         widget=forms.TextInput(
