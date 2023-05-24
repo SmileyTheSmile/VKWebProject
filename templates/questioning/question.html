@@ -12,6 +12,9 @@
                 <h1 class="mt-2">
                     {{ question.title }}
                 </h1> 
+                <h4 class="text-truncate text-muted">
+                    {% trans 'Asked' %}: {{ question.date_published }}
+                </h4>  
             </div>
         </div>
         
@@ -23,18 +26,45 @@
 
         <hr>
 
-        <div class="d-flex">
-            <p class="text-truncate text-muted pe-3">
-                {% trans 'Tags' %}: 
-            </p>    
-            {% include 'blocks/tags_block_sm.html' with tags=question.tags.all %}
-        </div>
+        <div class="d-flex flex-row justify-content-between">
+            <div class="d-flex flex-row me-3">
+                <p class="text-muted pe-3">
+                    {% trans 'Tags' %}: 
+                </p>    
+                <div>
+                    {% include 'blocks/tags_block_sm.html' with tags=question.tags.all %}
+                </div>
+            </div> 
+            <div class="d-flex flex-column border border-muted rounded p-2 overflow-scroll">
+                <div class="d-flex flex-row">
+                    <img class="rounded-circle me-2" alt="{{ question.author.user.login }}'s avatar" src="{{ question.author.avatar.url }}" width=32 height=32>                  
+                <p class="text-truncate">
+                    {{ question.author.user.username }}
+                </p>
+                </div>   
+                <p class="text-truncate text-muted">
+                    {% trans 'Asked' %}: {{ question.date_published }}
+                </p>    
+            </div> 
+        </div> 
     </div>
-<!--TODO Add an answer form-->
-<!--TODO Add a correct answer checkbox-->
-<!--TODO Fix the UI-->
-    <hr>
 
+  {% include 'blocks/form_errors.html' with form=form %}
+
+    <form class="mt-3" method="POST">
+        <h3 class="">
+            {% trans 'AnswerTheQuestion' %}
+        </h3> 
+        {% include 'blocks/form_fields.html' with form=form%}
+        <button type="submit" class="btn btn-primary mb-2">
+            {% trans 'PostAnswer' %}
+        </button>
+    </form>
+    <div class="d-flex flex-row justify-content-between mt-4">
+        <h3 class="">
+            {% trans 'HowManyAnswers' %}: {{ question.answers_num }}
+        </h3> 
+    </div>
     <div id="answers_list" class="text-start">
         {% for answer in page_obj %}
             {% include 'blocks/answer_item.html' with answer=answer parent="answers_list" %}

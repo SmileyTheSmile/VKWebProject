@@ -26,15 +26,17 @@ class Command(BaseCommand):
             return []
         
         user_ids = Profile.objects.values_list('id', flat=True)
-        question_ids = Question.objects.values_list('id', flat=True)
+        questions = Question.objects.all()
 
-        for question_id in question_ids:
-                for _ in range(answers_num):
-                    yield Answer(
-                                author_id=user_ids[random.randint(0, len(user_ids) - 1)],
-                                question_id=question_id,
-                                content=lorem.paragraph()
-                                )
+        for question in questions:
+            for _ in range(answers_num):
+                yield Answer(
+                            author_id=user_ids[random.randint(0, len(user_ids) - 1)],
+                            question=question,
+                            content=lorem.paragraph()
+                            )
+            question.answers_num += answers_num
+        Question.objects.bulk_update(questions, ['answers_num'])
 
 
     def handle(self, *args, **options):

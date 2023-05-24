@@ -3,7 +3,6 @@ from HAsker.management.commands import (
     fill_questions,
     fill_tags, 
     fill_users, 
-    set_all_avatars, 
     fill_answers,
     fill_votes,
 )
@@ -20,7 +19,6 @@ class Command(BaseCommand):
         commands = [
             fill_tags.Command(),
             fill_users.Command(),
-            set_all_avatars.Command(),
             fill_questions.Command(),
             fill_answers.Command(),
             fill_votes.Command(),

@@ -3,17 +3,35 @@
 {% block content %}
     <div class="d-flex container border border-secondary rounded p-3 mt-3 text-start">
         <div class="col-md-1 d-flex flex-wrap justify-content-center align-content-start pe-3">
-            {% include 'blocks/votes_block_sm.html' with object=answer %}
+            <div class="d-flex flex-column">
+                {% include 'blocks/votes_block_sm.html' with object=answer %}
+                
+                <input type="checkbox" class="btn-check" id="btn-check-2-outlined" autocomplete="off">
+                <label class="h2 mt-3 btn btn-outline-success" for="btn-check-2-outlined">
+                    <i class="bi bi-check-lg"></i>
+                </label>
+            </div> 
         </div> 
         <div class="col-md-11">
-            <p class="h6 text-truncate">
-                {{ answer.author.user.username }}
-            </p>
-
-            <p class="">
+            <p class="overflow-auto">
                 {{ answer.content }}
             </p>
+
+            <hr>
+
+            <div class="d-flex justify-content-end">
+                <div class="d-flex flex-column border border-muted rounded p-2 overflow-auto">
+                    <div class="d-flex flex-row">
+                        <img class="rounded-circle me-2" alt="{{ answer.author.user.username }}'s avatar" src="{{ answer.author.avatar.url }}" width=32 height=32>                  
+                    <p class="text-truncate">
+                        {{ answer.author.user.username }}
+                    </p>
+                    </div>   
+                        <p class="text-truncate text-muted">
+                            {% trans 'Answered' %}: {{ answer.date_published }}
+                        </p>    
+                </div> 
+            </div> 
         </div> 
     </div> 
-<!--TODO Make a proper answer card-->
 {% endblock %}

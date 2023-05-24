@@ -7,23 +7,10 @@
     {% trans 'Registration' %}
   </h1>
 
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="mb-3">
-        {% if field.label_tag %}
-          <label class="form-label">
-            {{ field.label_tag }}:
-          </label>
-        {% endif %}
-
-        {{ field }}
-
-        {% if field.help_text %}
-          <label class="helptext"> {{ field.help_text }} </label>
-        {% endif %}
-      </div>
-    {% endfor %}
+  {% include 'blocks/form_errors.html' with form=form %}
+  
+  <form method="POST" enctype="multipart/form-data">
+    {% include 'blocks/form_fields.html' with form=form%}
 
     <button type="submit" class="btn btn-primary">
       {% trans 'Register' %}

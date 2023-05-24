@@ -1,7 +1,8 @@
+from typing import Any
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UsernameField
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from HAsker.models import Question
+from HAsker.models import Question, Answer, Profile
 
 import django.forms as forms
 
@@ -11,7 +12,7 @@ class LoginForm(AuthenticationForm):
         max_length=256,
         required=True,
         label=_('EnterLogin'),
-        help_text=_('UsernameHelp'),
+        #help_text=_('UsernameHelp'),
         widget=forms.EmailInput(
             attrs= {
                 'class': "form-control",
@@ -101,6 +102,21 @@ class SignUpForm(UserCreationForm):
             }
         ),
     )
+ 
+    def save(self, commit = True):
+        user = super().save(commit)
+        nickname = self.cleaned_data.get('nickname')
+        new_profile = Profile.objects.create(
+            user=user,
+            nickname=nickname,
+        )
+
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            new_profile.avatar = avatar
+            new_profile.save()
+            
+        return user
     
     class Meta:
         model = User
@@ -111,10 +127,47 @@ class SignUpForm(UserCreationForm):
             'password1', 
             'password2', 
             'avatar', 
-        ]
+        ]   
+    
 
-class ProfileForm(forms.ModelForm):
-    pass
+class ProfileSettingsForm(forms.ModelForm):
+    nickname = forms.CharField(
+        required=False,
+        max_length=256,
+        label=_('RegisterNickname'),
+        widget=forms.TextInput(
+            attrs= {
+                'class': "form-control"
+            }
+        ),
+    )
+    avatar = forms.ImageField(
+        required=False,
+        label=_('UploadAvatar'),
+        widget=forms.FileInput(
+            attrs= {
+                'class': "btn btn-outline"
+            }
+        ),
+    ) 
+
+    def save(self, commit = True):
+        user = super().save(commit)
+        profile = user.profile
+        profile.nickname = self.cleaned_data.get('nickname')
+        profile.avatar = self.cleaned_data.get('avatar')
+        profile.save()
+            
+        return user
+    
+    class Meta:
+        model = User
+        fields = [
+            'nickname',
+            'avatar', 
+        ]   
+
+
 
 class AskForm(forms.ModelForm):
     title = forms.CharField(
@@ -154,4 +207,23 @@ class AskForm(forms.ModelForm):
             'title',
             'content',
             'tags',
+        )
+
+class AnswerForm(forms.ModelForm):
+    content = forms.CharField(
+        required=True,
+        max_length=30000,
+        label=_('AnswerContent'),
+        widget=forms.Textarea(
+            attrs= {
+                'class': "form-control",
+                "rows":"10",
+            }
+        ), 
+    )
+
+    class Meta: 
+        model = Answer
+        fields = (
+            'content',
         )

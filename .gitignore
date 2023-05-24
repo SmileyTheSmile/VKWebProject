@@ -2,6 +2,7 @@
 /.vscode
 /tasks
 /vendor
+/media/avatars
 
 HAsker/__pycache__
 VKProject/__pycache__

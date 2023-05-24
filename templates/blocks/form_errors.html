@@ -1,0 +1,13 @@
+
+ 
+{% block content %}
+    {% if form.errors %}
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <p class="text-danger-emphasis">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

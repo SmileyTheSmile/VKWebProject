@@ -2,7 +2,8 @@ from django.core.management.base import BaseCommand
 
 from HAsker.models import Profile
 
-link = 'https://i.stack.imgur.com/7XElg.jpg?s=64&g=1'
+link = 'https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png'
+link = 'avatars/default.jpeg'
 
 # python manage.py set_all_avatars
 

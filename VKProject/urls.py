@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.urls import path
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 from HAsker import views
 from django.views.generic import RedirectView
 from django.contrib.auth.views import (
     LogoutView,
     PasswordResetView,
 )
-
 
 urlpatterns = [
      path('',
@@ -40,6 +42,9 @@ urlpatterns = [
      path('profile/<int:pk>/',
           views.ProfileView.as_view(),
           name='profile'),
+     path('settings/',
+          views.ProfileSettingsView.as_view(),
+          name='profile_settings'),
      path('password_reset/',
           PasswordResetView.as_view(),
           name='password_reset'),
@@ -47,3 +52,6 @@ urlpatterns = [
           views.AskView.as_view(),
           name='ask'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

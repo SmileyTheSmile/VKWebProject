@@ -7,8 +7,8 @@ from HAsker.management.commands import (
     clean_question_votes, 
     clean_answer_votes, 
     clean_answers,
+    clean_avatars,
 )
-from HAsker.management.commands import clean_answer_votes
 
 # python manage.py clean_database
 
@@ -23,6 +23,7 @@ class Command(BaseCommand):
             clean_question_votes.Command(),
             clean_questions.Command(),
             clean_users.Command(),
+            #clean_avatars.Command(),
         ]
         
         for command in commands:

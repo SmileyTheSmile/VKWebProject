@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for tag in tags %}
-        <a class="btn btn-primary btn-sm mb-2 me-2 w-auto text-truncate" href="{% url 'questions_tagged' tag=tag.id %}" role="button">
+        <a class="btn btn-secondary btn-sm mb-2 me-2 text-truncate" href="{% url 'questions_tagged' tag=tag.id %}" role="button">
             {{ tag.name }}
         </a>
     {% empty %}

@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.db.models import Count, F, Sum, Q
-import lorem
-import itertools
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # python manage.py makemigrations HAsker
 # python manage.py makemigrations
@@ -15,7 +15,6 @@ class IRateableManager(models.Manager):
 
 
 class QuestionManager(IRateableManager):
-    # TODO Add queries for differently sorted questions
     def question_by_id(self, id):
         return self.filter(id=id)
     
@@ -32,20 +31,22 @@ class QuestionManager(IRateableManager):
         pass
     
     def update_rating(self):
-        questions = self.all()
+        questions = self.annotate(total_score=Sum('votes__score'))
         for question in questions:
-            question_votes = question.votes.values_list('score')
-            question.rating = sum(itertools.chain(*question_votes)) or 0
-            
-        self.bulk_update(questions, ['rating'])    
+            question.rating = question.total_score or 0
+        self.bulk_update(questions, ['rating'])   
+    
+    def update_answers_num(self):
+        questions = self.annotate(answers_count=Count('answers'))
+        for question in questions:
+            question.rating = question.answers_count
+        self.bulk_update(questions, ['answers_num'])    
 
 class AnswerManager(IRateableManager):
     def update_rating(self):
-        answers = self.all()
+        answers = self.annotate(total_score=Sum('votes__score'))
         for answer in answers:
-            answer_votes = answer.votes.values_list('score')
-            answer.rating = sum(itertools.chain(*answer_votes)) or 0
-            
+            answer.rating = answer.total_score or 0
         self.bulk_update(answers, ['rating'])    
 
 class ProfileManager(IRateableManager):
@@ -53,15 +54,9 @@ class ProfileManager(IRateableManager):
         return self.order_by('-rating', 'user__date_joined')[:num]
     
     def update_rating(self):
-        profiles = self.all()
+        profiles = self.annotate(total_score=Sum('answervote__score') + Sum('questionvote__score'))
         for profile in profiles:
-            answer_votes = profile.answervote_set.all()
-            question_votes = profile.questionvote_set.all()
-            total_score = answer_votes.aggregate(Sum('score'))['score__sum'] or 0
-            total_score += question_votes.aggregate(Sum('score'))['score__sum'] or 0
-            
-            profile.rating = total_score
-            
+            profile.rating = profile.total_score or 0
         self.bulk_update(profiles, ['rating'])
    
 class TagManager(models.Manager):
@@ -99,19 +94,30 @@ class Profile(IRateable):
         blank=False,
         )
     avatar = models.ImageField(
-        default='default.jpg',  
-        upload_to='profile_pics/%Y/%m/%d/',
+        blank=True,
+        default='default_avatars.jpeg',  
+        upload_to='avatars/%Y/%m/%d/',
     )
 
     def __str__(self):
         return self.user.username
-    
+
     def absolute_url(self):
         return f"/profile/{self.pk}/"
     
     class Meta:
         db_table = 'profile'
         ordering = ['-user']
+    
+'''
+    @receiver(post_save, sender=User)
+    def update_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance,
+            nickname=nickname,
+            avatar=avatar,)
+        instance.profile.save()
+'''
     
 
 class Tag(models.Model):
@@ -146,10 +152,10 @@ class Question(IRateable):
     content = models.TextField(
         max_length=30000,
     )
-
-
-    def update_votes_count(self):
-        self.rating = self.votes.aggregate(Sum('score'))['score__sum']
+    answers_num = models.IntegerField(
+            blank=False,
+            default=0,
+        )
 
 
 class Answer(IRateable):
@@ -180,10 +186,6 @@ class Answer(IRateable):
         related_name="answers",
     )
     
-    
-    def update_votes_count(self):
-        self.rating = self.votes.aggregate(Sum('score'))['score__sum']
-
 
 class Vote(models.Model):
     author = models.ForeignKey(

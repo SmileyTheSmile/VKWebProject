@@ -5,6 +5,8 @@ from HAsker.models import Tag
  
 from random_word import RandomWords
 
+from HAsker.services import random_word
+
 # python manage.py fill_tags 10000
 
 class Command(BaseCommand):
@@ -15,7 +17,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('tags_num', nargs='+', type=int)
 
-    def unique_tag(self, old_tags, word_generator):
+    def unique_tag(self, old_tags, max_len):
+        tag = random_word(max_len)
+        while tag in old_tags:
+            tag = random_word(max_len)
+        return tag
+    
+    def unique_tag_real_word(self, old_tags, word_generator):
         tag = word_generator.get_random_word()
         while tag in old_tags:
             tag = word_generator.get_random_word()
@@ -26,7 +34,7 @@ class Command(BaseCommand):
 
         word_generator = RandomWords()
         for _ in range(tag_num):
-            tag = self.unique_tag(tag_names, word_generator)
+            tag = self.unique_tag(tag_names, 25)
             tag_names.append(tag)
             yield Tag(name=tag)
 

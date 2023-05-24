@@ -15,7 +15,7 @@
                 </h1>
             {% elif request.resolver_match.kwargs.order == 'new'%}
                 <h1 class="mt-2 align-content-center">
-                    {% trans 'PopularQuestions' %}
+                    {% trans 'NewQuestions' %}
                 </h1>
             {% else %}
                 <h1 class="mt-2 align-content-center">
@@ -43,7 +43,6 @@
             </div>
         {% endfor %}
     </div>
-<!--TODO Add sorting by new, popular, tag-->
     
     {% include 'blocks/paginator.html' %}
 {% endblock %}

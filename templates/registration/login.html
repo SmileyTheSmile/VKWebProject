@@ -6,11 +6,8 @@
   <h1>
     {% trans 'LogIn' %}
   </h1>
-  {% if form.errors %}  
-    <p class="text-danger">
-      {{form.errors}}
-    </p>
-  {% endif %}
+  
+  {% include 'blocks/form_errors.html' with form=form %}
 
   {% if next %}
       {% if user.is_authenticated %}
@@ -22,25 +19,7 @@
   {% endif %}
 
   <form method="post" action="{% url 'login' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="mb-3">
-        {% if field.label_tag %}
-          <label for="loginField" class="form-label pe-2">
-            {{ field.label_tag }}
-          </label>
-        {% endif %}
-
-        {{ field }}
-
-        {% if field.help_text %}
-          <label class="helptext form-text">
-          {{ field.help_text }}
-          </label>
-        {% endif %}
-      </div>
-    {% endfor %}
-
+    {% include 'blocks/form_fields.html' with form=form%}
     <button href="{% url 'login' %}" type="submit" class="btn btn-primary"  value="Login">
       {% trans 'LogIn' %}
     </button>
