@@ -2,7 +2,7 @@ from typing import Any
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UsernameField
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from HAsker.models import Question, Answer, Profile
+from HAsker.models import Question, Answer, Profile, Tag
 
 import django.forms as forms
 
@@ -151,7 +151,7 @@ class ProfileSettingsForm(forms.ModelForm):
     ) 
 
     def save(self, commit = True):
-        user = super().save(commit)
+        user = super().save(False)
         profile = user.profile
         profile.nickname = self.cleaned_data.get('nickname')
         profile.avatar = self.cleaned_data.get('avatar')
@@ -199,6 +199,36 @@ class AskForm(forms.ModelForm):
         ),
     )
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(AskForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit = True):
+        question = super().save(False)
+        question.title = self.cleaned_data.get('title')
+        question.content = self.cleaned_data.get('content')
+        question.author = self.user.profile
+
+        tagwords = list(map(lambda i:i.replace(" ", ""), self.cleaned_data.get('tags').split(',')))
+        existing_tags = Tag.objects.filter(name__in=tagwords)
+        existing_tagwords = [tag.name for tag in existing_tags]
+
+        new_tags = []
+        
+        for tagword in tagwords:
+            if not tagword in existing_tagwords:
+                new_tag = Tag(name=tagword)
+                new_tags.append(new_tag)
+                existing_tagwords.append(new_tag.name)
+        
+        new_tags = Tag.objects.bulk_create(new_tags)
+        new_tags.extend(existing_tags)
+
+        question.save()
+        question.tags.set(new_tags)
+            
+        return question
+
     class Meta: 
         model = Question
         fields = (
@@ -206,6 +236,7 @@ class AskForm(forms.ModelForm):
             'content',
             'tags',
         )
+    
 
 class AnswerForm(forms.ModelForm):
     content = forms.CharField(

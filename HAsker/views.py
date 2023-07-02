@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
 
 from django.utils.translation import gettext as _
 
@@ -32,7 +33,7 @@ class QuestionsView(ListView):
         'popular_users': Profile.objects.popular_users(5),
         'ordering_masks': {
             "new": {
-                "sort_field": "date_published",
+                "sort_field": "-date_published",
                 "label": _("NewQuestions"),
             },
             "top": {
@@ -53,7 +54,7 @@ class QuestionsView(ListView):
         return self.ordering
 
     
-class AskView(CreateView, LoginRequiredMixin):
+class AskView(LoginRequiredMixin, CreateView):
     template_name = 'questioning/ask.html'
     login_url = "login"
     model = Question
@@ -63,6 +64,11 @@ class AskView(CreateView, LoginRequiredMixin):
         'popular_tags': Tag.objects.popular_tags(9),
         'popular_users': Profile.objects.popular_users(5),
     }
+
+    def get_form_kwargs(self):
+        kwargs = super(AskView, self).get_form_kwargs()
+        kwargs.update({"user": self.request.user})
+        return kwargs
 
 
 class QuestionView(DetailView, MultipleObjectMixin, FormMixin):
@@ -79,9 +85,7 @@ class QuestionView(DetailView, MultipleObjectMixin, FormMixin):
 
     def get_context_data(self, **kwargs):
         related_answers = Answer.objects.filter(question=self.get_object())
-        context = super(QuestionView, self).get_context_data(object_list=related_answers,
-                                                             **kwargs)
-        return context
+        return super(QuestionView, self).get_context_data(object_list=related_answers, **kwargs)
    
 
 class SignUpView(CreateView):

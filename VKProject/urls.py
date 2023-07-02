@@ -29,7 +29,7 @@ urlpatterns = [
           name='admin'),
      path('login/',
           views.SignInView.as_view(),
-               name='login',),
+          name='login',),
      path('logout/',
           LogoutView.as_view(next_page='login'),
           name='logout'),

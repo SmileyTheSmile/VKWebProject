@@ -12,43 +12,47 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="flex-fill mx-4">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder={% trans 'Search' %} aria-label="Search">
-                        <a class="btn btn-success text-nowrap" href="{% url 'ask' %}" role="button">
-                            {% trans 'AskQuestion' %}
-                        </a> 
-                    </form>
-                </div>
-                <div class="align-self-end">
-                    {% if request.user.is_authenticated %}
-                        <div class="d-flex flex-wrap">
-                            <div>
-                                <img class="rounded-circle me-2" src="{{ request.user.profile.avatar.url }}" width=32 height=32>
-                            </div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="flex-fill mx-4">
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder={% trans 'Search' %} aria-label="Search">
+                            <a class="btn btn-success text-nowrap" href="{% url 'ask' %}" role="button">
+                                {% trans 'AskQuestion' %}
+                            </a> 
+                        </form>
+                    </li>
+                    <li class="align-self-end">
+                        {% if request.user.is_authenticated %}
                             <div class="d-flex flex-row">
-                                <p class="me-3">
-                                    {{ request.user.username }}
-                                </p>
-                                <a class="btn btn-outline-primary" href="{% url 'profile_settings' %}"" role="button">
-                                    {% trans 'ProfileSettings' %}
+                                <div>
+                                    <img class="rounded-circle me-2" src="{{ request.user.profile.avatar.url }}" width=32 height=32>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <p class="me-3">
+                                        {{ request.user.username }}
+                                    </p>
+                                    <div class="d-flex flex-row">
+                                        <a class="link-primary pe-3" href="{% url 'profile_settings' %}" role="button">
+                                            {% trans 'ProfileSettings' %}
+                                        </a>
+                                        <a class="link-primary" href="{% url 'logout' %}" role="button">
+                                            {% trans 'LogOut' %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div>
+                                <a class="btn btn-primary" href="{% url 'login' %}" role="button">
+                                    {% trans 'LogIn' %}
                                 </a>
-                                <a class="btn btn-outline-primary" href="{% url 'logout' %}" role="button">
-                                    {% trans 'LogOut' %}
+                                <a class="btn btn-outline-primary" href="{% url 'signup' %}" role="button">
+                                    {% trans 'Register' %}
                                 </a>
                             </div>
-                        </div>
-                    {% else %}
-                        <div>
-                            <a class="btn btn-primary" href="{% url 'login' %}" role="button">
-                                {% trans 'LogIn' %}
-                            </a>
-                            <a class="btn btn-outline-primary" href="{% url 'signup' %}" role="button">
-                                {% trans 'Register' %}
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
